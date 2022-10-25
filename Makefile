@@ -8,7 +8,8 @@ BUILD    := ./build
 OBJ_DIR  := $(BUILD)/objects
 APP_DIR  := .
 EXEC     := program
-SRC      := $(wildcard src/*.cpp)
+SRC      := $(wildcard src/*.cpp) \
+	$(wildcard src/linalg/*.cpp)
 
 OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 DEPENDS=${OBJECTS:.o=.d}
