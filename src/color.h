@@ -5,6 +5,8 @@
 
 #include <ostream>
 
+typedef Vec3<double> Color;
+
 void writeColor(std::ostream& out, Color pixel);
 
 #endif

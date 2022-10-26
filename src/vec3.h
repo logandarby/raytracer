@@ -2,6 +2,7 @@
 #define _VEC3_H
 
 #include <ostream>
+#include <array>
 #include <cmath>
 
 template <class T>
@@ -24,6 +25,13 @@ public:
         e[0] *= -1;
         return *this;
     }
+    T operator[](const int i) const {
+        if (i < 0 || i > 2) {
+            throw std::out_of_range("Index of Vec3<T> must be between 0 and 2 inclusive");
+        }
+        return e[i];
+    }
+
     T& operator[](const int i) {
         if (i < 0 || i > 2) {
             throw std::out_of_range("Index of Vec3<T> must be between 0 and 2 inclusive");
@@ -66,7 +74,7 @@ public:
         return e[0] * e[0] + e[1] * e[1]  + e[2] * e[2];
     }
 private:
-    T e[3];
+    std::array<T, 3> e;
 };
 
 template <typename T>
@@ -91,7 +99,7 @@ Vec3<T> operator*(const Vec3<T> &u, const Vec3<T> &v) {
 
 template <typename T>
 Vec3<T> operator*(double t, const Vec3<T> &v) {
-    return Vec3<T>(t*v[0], t*v[1], t*v[2]);
+    return Vec3<T>(t * v[0], t * v[1], t * v[2]);
 }
 
 template <typename T>
@@ -123,7 +131,7 @@ Vec3<T> normalize(Vec3<T> v) {
     return v / v.length();
 }
 
-typedef Vec3<double> Point3;
-typedef Vec3<double> Color;
+typedef Vec3<double> Point;
+typedef Vec3<double> Direction;
 
 #endif
