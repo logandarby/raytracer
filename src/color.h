@@ -7,6 +7,6 @@
 
 typedef Vec3<double> Color;
 
-void writeColor(std::ostream& out, Color pixel);
+void writeColor(std::ostream& out, Color pixel, const int samplesPerPixel);
 
 #endif

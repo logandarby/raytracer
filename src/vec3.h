@@ -25,6 +25,9 @@ public:
         e[0] *= -1;
         return *this;
     }
+    Vec3<T> operator-() const {
+        return Vec3<T>{-1 * e[0], -1 * e[1], -1 * e[2]};
+    }
     T operator[](const int i) const {
         if (i < 0 || i > 2) {
             throw std::out_of_range("Index of Vec3<T> must be between 0 and 2 inclusive");
