@@ -1,5 +1,5 @@
-#ifndef _VEC3_H
-#define _VEC3_H
+#ifndef ___VEC3_H
+#define ___VEC3_H
 
 #include <ostream>
 #include <array>
@@ -136,5 +136,6 @@ Vec3<T> normalize(Vec3<T> v) {
 
 typedef Vec3<double> Point;
 typedef Vec3<double> Direction;
+typedef Vec3<double> Vec3d;
 
 #endif

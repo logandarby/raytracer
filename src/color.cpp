@@ -7,10 +7,11 @@ void writeColor(std::ostream& out, const Color pixel, const int samplesPerPixel)
     double g = pixel.y();
     double b = pixel.z();
 
+    // average samples and gamma correct for gamma 2
     const double scale = 1.0 / samplesPerPixel;
-    r *= scale;
-    g *= scale;
-    b *= scale;
+    r = sqrt(scale * r);
+    g = sqrt(scale * g);
+    b = sqrt(scale * b);
 
     out << static_cast<int>(256 * std::clamp(r, 0.0, 0.999)) << ' '
         << static_cast<int>(256 * std::clamp(g, 0.0, 0.999)) << ' '
