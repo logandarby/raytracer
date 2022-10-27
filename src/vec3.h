@@ -57,6 +57,8 @@ double dot(const Vec3 &u, const Vec3 &v);
 Vec3 cross(const Vec3 &u, const Vec3 &v);
 Vec3 normalize(Vec3 v);
 
+Vec3 reflect(const Vec3 &v, const Vec3 &normal);
+
 typedef Vec3 Point;
 
 #endif

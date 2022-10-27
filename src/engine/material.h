@@ -21,6 +21,7 @@ public:
     virtual bool scatter(
         const Ray &in, const HitRecord &rec, Color &attenuation, Ray &scattered
     ) const override {
+        (void)in;
         Point scatterDirection = rec.normal + Vec3::randomUnitVector();
 
         // Catch degenerate scatter
@@ -34,6 +35,23 @@ public:
     }
 private:
     Color m_albedo;
+};
+
+class Metal : public Material {
+public:
+    Metal(const Color &a, const double fuzz) : m_albedo{a}, m_fuzz{fuzz} {};
+
+    virtual bool scatter(
+        const Ray &in, const HitRecord &rec, Color &attenuation, Ray &scattered
+    ) const override {
+        Vec3 refleced = reflect(normalize(in.direction()), rec.normal);
+        scattered = Ray{rec.p, refleced + m_fuzz*Vec3::randomInUnitSphere()};
+        attenuation = m_albedo;
+        return dot(scattered.direction(), rec.normal) > 0;
+    }
+private:
+    Color m_albedo;
+    double m_fuzz;
 };
 
 #endif

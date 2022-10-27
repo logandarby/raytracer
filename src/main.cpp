@@ -15,8 +15,12 @@ Color ray_color(const Ray& r, const Hittable& scene, const int depth) {
 
     HitRecord rec{};
     if (scene.hit(r, 0.001, DBL_INFINITY, rec)) {
-        Point target = rec.p + rec.normal + Vec3::randomUnitVector();
-        return 0.5 * ray_color(Ray{rec.p, target - rec.p}, scene, depth - 1);
+        Ray scattered;
+        Color attenuation;
+        if (rec.materialPtr->scatter(r, rec, attenuation, scattered)) {
+            return attenuation * ray_color(scattered, scene, depth - 1);
+        }
+        return Color{0, 0, 0};
     }
 
     // background gradient
@@ -31,13 +35,24 @@ int main() {
     const int imageWidth = 400;
     const int imageHeight = static_cast<int>(imageWidth / aspectRatio);
     const int samplesPerPixel = 20;
-    const int maxDepth = 20;
+    const int maxDepth = 50;
 
     // Scene
     HittableList scene{};
-    shared_ptr<Material> lambertianDiffuse = make_shared<Lambertian>(Color{0, 0, 0});
-    scene.add(make_shared<Sphere>(Point{0, 0, -1}, 0.5, lambertianDiffuse));
-    scene.add(make_shared<Sphere>(Point{0, -100.5, -1}, 100, lambertianDiffuse));
+    // auto lambertianDiffuse = make_shared<Lambertian>(Color{0.5, 0.5, 0.5});
+    // auto metalDiffuse = make_shared<Metal>(Color{0.5, 0.5, 0.5});
+    // scene.add(make_shared<Sphere>(Point{0, 0, -1}, 0.5, metalDiffuse));
+    // scene.add(make_shared<Sphere>(Point{0, -100.5, -1}, 100, lambertianDiffuse));
+
+    auto materialGround = make_shared<Lambertian>(Color(0.5, 0.5, 0.5));
+    auto materialCenter = make_shared<Lambertian>(Color(0.7, 0.3, 0.3));
+    auto materialLeft   = make_shared<Metal>(Color(0.8, 0.8, 0.8), 0.0);
+    auto materialRight  = make_shared<Metal>(Color(0.8, 0.8, 0.8), 0.5);
+
+    scene.add(make_shared<Sphere>(Point( 0.0, -100.5, -1.0), 100.0, materialGround));
+    scene.add(make_shared<Sphere>(Point( 0.0,    0.0, -1.0),   0.5, materialCenter));
+    scene.add(make_shared<Sphere>(Point(-1.0,    0.0, -1.0),   0.5, materialLeft));
+    scene.add(make_shared<Sphere>(Point( 1.0,    0.0, -1.0),   0.5, materialRight));
 
     // Camera
     Camera camera;
