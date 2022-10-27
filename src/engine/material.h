@@ -54,4 +54,41 @@ private:
     double m_fuzz;
 };
 
+class Dielectric : public Material {
+public:
+    Dielectric(const double indexOfRefraction) : m_ir{indexOfRefraction} {}
+
+    virtual bool scatter(
+        const Ray &in, const HitRecord &rec, Color &attenuation, Ray &scattered
+    ) const override {
+        const double refractRatio = (rec.frontFace) ? 1.0/m_ir : m_ir;
+        const Vec3 unitDir = normalize(in.direction());
+
+        const double costheta = fmin(dot(-unitDir, rec.normal), 1.0);
+        const double sintheta = sqrt(1.0 - costheta*costheta);
+
+        const bool cannotRefract = refractRatio * sintheta > 1.0;
+        Vec3 direction;
+        if (cannotRefract || reflectance(costheta, refractRatio) > randomDouble()) {
+            // Total internal reflection
+            direction = reflect(unitDir, rec.normal);
+        } else {
+            direction = refract(unitDir, rec.normal, refractRatio);
+        }
+
+        scattered = Ray{rec.p, direction};
+        attenuation = Color{1.0, 1.0, 1.0};
+        return true;
+    }
+private:
+    double m_ir; // index of refraction;
+
+    static double reflectance(const double cosine, const double refIdx) {
+        // Use Schlick's approximation for reflectance.
+        double r0 = (1-refIdx) / (1+refIdx);
+        r0 = r0*r0;
+        return r0 + (1-r0)*pow((1 - cosine),5);
+    }
+};
+
 #endif

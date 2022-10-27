@@ -98,6 +98,14 @@ Vec3 Vec3::randomInHemisphere(const Vec3 &normal) {
     return -inUnitSphere;
 }
 
+Vec3 Vec3::randomInUnitDisk() {
+    while(true) {
+        Vec3 inDisk{randomDouble(-1, 1), randomDouble(-1, 1), 0};
+        if (inDisk.length_sqr() >= 1) continue;
+        return inDisk;
+    }
+}
+
 std::ostream& operator<<(std::ostream &out, const Vec3 &v) {
     return out << v.x() << ' ' << v.y() << ' ' << v.z();
 }
@@ -144,4 +152,11 @@ Vec3 normalize(Vec3 v) {
 
 Vec3 reflect(const Vec3 &v, const Vec3 &n) {
     return v - 2*dot(v, n)*n;
+}
+
+Vec3 refract(const Vec3 &in, const Vec3 &normal, const double riratio) {
+    const double costheta = fmin(dot(-in,normal), 1.0);
+    const Vec3 routperp = riratio * (in + (costheta * normal));
+    const Vec3 routpar = -sqrt(fabs(1.0 - routperp.length_sqr())) * normal;
+    return routpar + routperp;
 }

@@ -34,28 +34,29 @@ int main() {
     const auto aspectRatio = 16.0 / 9.0;
     const int imageWidth = 400;
     const int imageHeight = static_cast<int>(imageWidth / aspectRatio);
-    const int samplesPerPixel = 20;
+    const int samplesPerPixel = 100;
     const int maxDepth = 50;
+
+    // Camera
+    const Point lookfrom{-2, 2, 1};
+    const Point lookat{0, 0, -1};
+    const Point vup{0, 1, 0};
+    const double fov = 40;
+    const double distanceToFocus = (lookfrom - lookat).length();
+    const double aperture = 0.8;
+    Camera camera{aspectRatio, lookfrom, lookat, vup, fov, aperture, distanceToFocus};
 
     // Scene
     HittableList scene{};
-    // auto lambertianDiffuse = make_shared<Lambertian>(Color{0.5, 0.5, 0.5});
-    // auto metalDiffuse = make_shared<Metal>(Color{0.5, 0.5, 0.5});
-    // scene.add(make_shared<Sphere>(Point{0, 0, -1}, 0.5, metalDiffuse));
-    // scene.add(make_shared<Sphere>(Point{0, -100.5, -1}, 100, lambertianDiffuse));
-
     auto materialGround = make_shared<Lambertian>(Color(0.5, 0.5, 0.5));
-    auto materialCenter = make_shared<Lambertian>(Color(0.7, 0.3, 0.3));
-    auto materialLeft   = make_shared<Metal>(Color(0.8, 0.8, 0.8), 0.0);
+    auto materialCenter = make_shared<Lambertian>(Color(0.1, 0.2, 0.5));
+    auto materialLeft   = make_shared<Dielectric>(1.5);
     auto materialRight  = make_shared<Metal>(Color(0.8, 0.8, 0.8), 0.5);
 
     scene.add(make_shared<Sphere>(Point( 0.0, -100.5, -1.0), 100.0, materialGround));
     scene.add(make_shared<Sphere>(Point( 0.0,    0.0, -1.0),   0.5, materialCenter));
     scene.add(make_shared<Sphere>(Point(-1.0,    0.0, -1.0),   0.5, materialLeft));
     scene.add(make_shared<Sphere>(Point( 1.0,    0.0, -1.0),   0.5, materialRight));
-
-    // Camera
-    Camera camera;
 
     // Render
     std::cout << "P3\n" << imageWidth << ' ' << imageHeight << "\n255\n";

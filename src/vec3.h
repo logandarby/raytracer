@@ -40,6 +40,7 @@ public:
     static Vec3 randomInHemisphere(const Vec3 &normal);
     // For true lambertian diffusion (ideal)
     static Vec3 randomUnitVector();
+    static Vec3 randomInUnitDisk();
 private:
     std::array<double, 3> e;
 };
@@ -58,6 +59,9 @@ Vec3 cross(const Vec3 &u, const Vec3 &v);
 Vec3 normalize(Vec3 v);
 
 Vec3 reflect(const Vec3 &v, const Vec3 &normal);
+/*  Note that refractionratio is the ratio between the refraction indices of where the
+    ray is coming from, over where the ray is going */
+Vec3 refract(const Vec3 &v, const Vec3 &normal, const double refractionratio);
 
 typedef Vec3 Point;
 
