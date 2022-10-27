@@ -1,4 +1,5 @@
 #include "color.h"
+#include "util.h"
 #include <algorithm>
 
 void writeColor(std::ostream& out, const Color pixel, const int samplesPerPixel) {
@@ -16,4 +17,12 @@ void writeColor(std::ostream& out, const Color pixel, const int samplesPerPixel)
     out << static_cast<int>(256 * std::clamp(r, 0.0, 0.999)) << ' '
         << static_cast<int>(256 * std::clamp(g, 0.0, 0.999)) << ' '
         << static_cast<int>(256 * std::clamp(b, 0.0, 0.999)) << std::endl;
+}
+
+Color randomColor() {
+    return Color{randomDouble(), randomDouble(), randomDouble()};
+}
+
+Color randomColor(const double min, const double max) {
+    return Color{randomDouble(min, max), randomDouble(min, max), randomDouble(min, max)};
 }

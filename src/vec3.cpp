@@ -57,6 +57,10 @@ Vec3& Vec3::operator/=(const double t) {
     return *this;
 }
 
+bool Vec3::operator==(const Vec3 &v) const {
+    return ( x() == v.x() && y() == v.y() && z() == v.z() );
+}
+
 double Vec3::length() const {
     return std::sqrt(length_sqr());
 }

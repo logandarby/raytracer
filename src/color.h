@@ -9,4 +9,7 @@ typedef Vec3 Color;
 
 void writeColor(std::ostream& out, Color pixel, const int samplesPerPixel);
 
+Color randomColor();
+Color randomColor(double min, double max);
+
 #endif

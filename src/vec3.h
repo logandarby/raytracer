@@ -20,13 +20,15 @@ public:
 
     Vec3 operator-();
     Vec3 operator-() const;
-    double operator[](const int i) const;
     double operator[](const int i);
+    double operator[](const int i) const;
 
     Vec3& operator+=(const Vec3 &v);
     Vec3& operator-=(const Vec3 &v);
     Vec3& operator*=(const double t);
     Vec3& operator/=(const double t);
+
+    bool operator==(const Vec3 &v) const;
 
     double length() const;
     double length_sqr() const;

@@ -19,6 +19,11 @@ public:
         const double aperture = 0,
         double focusDistance = 0
     ) {
+
+        if (lookat == lookfrom) {
+            throw std::invalid_argument("The Camera's \"lookfrom\" and \"lookat\" parameters may not be equal");
+        }
+
         const double theta = degreesToRadians(vfov);
         const double h = tan(theta / 2.0);
         const double viewportHeight = 2.0 * h;
