@@ -3,14 +3,19 @@
 
 #include "ray.h"
 
+#include <memory>
+
+class Material;
+
 struct HitRecord {
     Point p;
-    Vec3<double> normal;
+    Vec3 normal;
     double t;
+    std::shared_ptr<Material> materialPtr;
     bool frontFace;
 
     // Sets the normal to face against the incident ray
-    void setFaceNormal(const Ray &r, const Vec3<double> &outwardNormal) {
+    void setFaceNormal(const Ray &r, const Vec3 &outwardNormal) {
         // true if ray is outside sphere
         frontFace = dot(r.direction(), outwardNormal) < 0;
         normal = frontFace ? outwardNormal : -outwardNormal;

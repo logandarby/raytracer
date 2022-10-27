@@ -18,17 +18,4 @@ double randomDouble();
 // Returns random number in [min, max)
 double randomDouble(const double min, const double max);
 
-Vec3d randomVector();
-
-Vec3d randomVector(const double min, const double max);
-
-// For circular diffusion
-Vec3d randomInUnitSphere();
-
-// For uninform diffusion
-Vec3d randomInHemisphere(const Vec3d &normal);
-
-// For true lambertian diffusion (ideal)
-Vec3d randomUnitVector();
-
 #endif

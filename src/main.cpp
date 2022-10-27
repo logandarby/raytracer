@@ -15,12 +15,12 @@ Color ray_color(const Ray& r, const Hittable& scene, const int depth) {
 
     HitRecord rec{};
     if (scene.hit(r, 0.001, DBL_INFINITY, rec)) {
-        Point target = rec.p + rec.normal + randomUnitVector();
+        Point target = rec.p + rec.normal + Vec3::randomUnitVector();
         return 0.5 * ray_color(Ray{rec.p, target - rec.p}, scene, depth - 1);
     }
 
     // background gradient
-    Vec3<double> unit_direction = normalize(r.direction());
+    Vec3 unit_direction = normalize(r.direction());
     const double t = 0.5*(unit_direction.y() + 1.0);
     return (1.0-t)*Color{1.0, 1.0, 1.0} + t*Color{0.5, 0.7, 1.0};
 }
@@ -35,8 +35,9 @@ int main() {
 
     // Scene
     HittableList scene{};
-    scene.add(make_shared<Sphere>(Point{0, 0, -1}, 0.5));
-    scene.add(make_shared<Sphere>(Point{0, -100.5, -1}, 100));
+    shared_ptr<Material> lambertianDiffuse = make_shared<Lambertian>(Color{0, 0, 0});
+    scene.add(make_shared<Sphere>(Point{0, 0, -1}, 0.5, lambertianDiffuse));
+    scene.add(make_shared<Sphere>(Point{0, -100.5, -1}, 100, lambertianDiffuse));
 
     // Camera
     Camera camera;

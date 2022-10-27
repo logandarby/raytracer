@@ -17,9 +17,9 @@ public:
         double focalHeight = 1.0;
 
         m_origin = Point{0, 0, 0};
-        m_horizontal = Vec3<double>{viewportWidth, 0, 0};
-        m_vertical = Vec3<double>{0, viewportHeight, 0};
-        m_lowerLeftCorner = m_origin - m_horizontal/2 - m_vertical/2 - Vec3<double>{0, 0, focalHeight};
+        m_horizontal = Vec3{viewportWidth, 0, 0};
+        m_vertical = Vec3{0, viewportHeight, 0};
+        m_lowerLeftCorner = m_origin - m_horizontal/2 - m_vertical/2 - Vec3{0, 0, focalHeight};
     }
 
     Ray getRay(const double u, const double v) {
@@ -32,8 +32,8 @@ public:
 private:
     Point m_origin;
     Point m_lowerLeftCorner;
-    Vec3<double> m_horizontal;
-    Vec3<double> m_vertical;
+    Vec3 m_horizontal;
+    Vec3 m_vertical;
 };
 
 #endif
