@@ -67,4 +67,7 @@ Vec3 refract(const Vec3 &v, const Vec3 &normal, const double refractionratio);
 
 typedef Vec3 Point;
 
+const Vec3 V_UNIT{1, 1, 1};
+const Vec3 V_ORIGIN{0, 0, 0};
+
 #endif

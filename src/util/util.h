@@ -5,7 +5,7 @@
 #include <cmath>
 #include <random>
 
-#include "vec3.h"
+#include "../vec3.h"
 
 const double DBL_INFINITY = std::numeric_limits<double>::infinity();
 const double PI = 3.1415926535897932385;
@@ -17,5 +17,8 @@ double randomDouble();
 
 // Returns random number in [min, max)
 double randomDouble(const double min, const double max);
+
+// Return random int in [min, max]
+int randomInt(const int min, const int max);
 
 #endif

@@ -15,3 +15,11 @@ double randomDouble() {
 double randomDouble(const double min, const double max) {
     return min + (max-min) * randomDouble();
 }
+
+double randomDouble(const int min, const int max) {
+    return min + (max-min) * randomDouble();
+}
+
+int randomInt(const int min, const int max) {
+    return static_cast<int>(randomDouble(min, max + 1));
+}

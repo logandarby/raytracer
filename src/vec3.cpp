@@ -1,5 +1,5 @@
 #include "vec3.h"
-#include "util.h"
+#include "util/util.h"
 
 Vec3 Vec3::operator-() {
     e[1] *= -1;

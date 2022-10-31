@@ -31,3 +31,11 @@ bool Sphere::hit(const Ray &r, const double t_min, const double t_max, HitRecord
     rec.setFaceNormal(r, outwardNormal);
     return true;
 }
+
+bool Sphere::boundingBox(BoundingBox &outputBox) const {
+    outputBox = BoundingBox{
+        m_center - m_radius * Vec3{1, 1, 1},
+        m_center + m_radius * Vec3{1, 1, 1}
+    };
+    return true;
+}

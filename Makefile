@@ -1,7 +1,7 @@
 # Makefile modified from https://www.partow.net/programming/makefile/index.html
 
 CXX      := g++
-CXXFLAGS := -std=c++17 -pedantic-errors -Wall -Wextra -Werror=vla
+CXXFLAGS := -std=c++17 -pedantic-errors -Wall -Wextra -Werror=vla -DDEBUG
 LDFLAGS  := -L extern/lib
 INCLUDE  := -I extern/include -I ./src
 BUILD    := ./build
@@ -9,7 +9,9 @@ OBJ_DIR  := $(BUILD)/objects
 APP_DIR  := .
 EXEC     := program
 SRC      := $(wildcard src/*.cpp) \
-	$(wildcard src/engine/*.cpp)
+	$(wildcard src/engine/*.cpp) \
+	$(wildcard src/engine/BVH/*.cpp) \
+	$(wildcard src/util/*.cpp) \
 
 OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 DEPENDS=${OBJECTS:.o=.d}

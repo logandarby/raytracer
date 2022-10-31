@@ -1,11 +1,13 @@
 #include <iostream>
+#include <chrono>
 
 #include "color.h"
-#include "util.h"
+#include "util/util.h"
 #include "engine/camera.h"
 #include "engine/ray.h"
 #include "engine/sphere.h"
 #include "engine/hittableList.h"
+#include "engine/BVH/bvhnode.h"
 
 Color ray_color(const Ray& r, const Hittable& scene, const int depth) {
 
@@ -78,9 +80,9 @@ HittableList randomScene() {
 int main() {
     // Image
     const auto aspectRatio = 3.0 / 2.0;
-    const int imageWidth = 1200;
+    const int imageWidth = 300;
     const int imageHeight = static_cast<int>(imageWidth / aspectRatio);
-    const int samplesPerPixel = 200;
+    const int samplesPerPixel = 50;
     const int maxDepth = 50;
 
     // Camera
@@ -94,8 +96,12 @@ int main() {
 
     // Scene
     HittableList scene = randomScene();
+    BVHNode sceneObjectTree{scene};
 
     // Render
+
+    auto start = std::chrono::steady_clock::now();
+
     std::cout << "P3\n" << imageWidth << ' ' << imageHeight << "\n255\n";
 
     for (int j = imageHeight-1; j >= 0; --j) {
@@ -107,10 +113,20 @@ int main() {
                 double u = double(i + randomDouble()) / (imageWidth - 1);
                 double v = double(j + randomDouble()) / (imageHeight - 1);
                 Ray r = camera.getRay(u, v);
-                pixel += ray_color(r, scene, maxDepth);
+                pixel += ray_color(r, sceneObjectTree, maxDepth);
             }
             writeColor(std::cout, pixel, samplesPerPixel);
         }
     }
     std::cerr << "\nDone\n";
+
+    auto end = std::chrono::steady_clock::now();
+
+    std::cerr << "Time Elapsed in minutes: "
+        << std::chrono::duration_cast<std::chrono::minutes>(end - start).count()
+        << " minutes\n";
+    std::cerr << "OR\n";
+    std::cerr << "Time Elapsed in seconds: "
+        << std::chrono::duration_cast<std::chrono::seconds>(end - start).count()
+        << " seconds\n";
 }

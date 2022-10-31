@@ -18,9 +18,11 @@ public:
     void clear() { m_objects.clear(); }
 
     virtual bool hit(const Ray &r, const double t_min, const double t_max, HitRecord &rec) const override;
+    virtual bool boundingBox(BoundingBox &outputBox) const override;
 
 private:
     std::vector<shared_ptr<Hittable>> m_objects;
+    friend class BVHNode;
 };
 
 #endif

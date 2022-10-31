@@ -6,7 +6,7 @@
 #include <memory>
 
 class Material;
-
+class BoundingBox;
 struct HitRecord {
     Point p;
     Vec3 normal;
@@ -26,6 +26,8 @@ class Hittable {
 public:
     // Checks if Ray hits the Hittable object between a t value of t_min and t_max. Stores the results in HitRecord rec
     virtual bool hit(const Ray &r, const double t_min, const double t_max, HitRecord &rec) const = 0;
+    // Stores the objects axis-aligned bounding box in outputBox
+    virtual bool boundingBox(BoundingBox &outputBox) const = 0;
     static const bool NO_HIT = false;
 };
 

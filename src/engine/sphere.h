@@ -3,6 +3,7 @@
 
 #include "hittable.h"
 #include "material.h"
+#include "BVH/boundingbox.h"
 
 class Sphere : public Hittable {
 public:
@@ -17,6 +18,8 @@ public:
 
     // Checks if Ray hits the Hittable object between a t value of t_min and t_max. Stores the results in HitRecord rec
     bool hit(const Ray &r, const double t_min, const double t_max, HitRecord &rec) const override;
+    // Stores the axis-aligned boundingbox in outputBox
+    bool boundingBox(BoundingBox &outputBox) const override;
 private:
     Point m_center;
     double m_radius;
