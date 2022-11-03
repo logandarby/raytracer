@@ -27,4 +27,7 @@ double randomDouble(const double min, const double max);
 // Return random int in [min, max]
 int randomInt(const int min, const int max);
 
+// Super fast inverse square root
+float fastInvSqrt(float number);
+
 #endif

@@ -153,7 +153,8 @@ Vec3 cross(const Vec3 &u, const Vec3 &v) {
 }
 
 Vec3 normalize(Vec3 v) {
-    return v / v.length();
+    return v * fastInvSqrt(v.length_sqr());
+    // return v / v.length();
 }
 
 Vec3 reflect(const Vec3 &v, const Vec3 &n) {
