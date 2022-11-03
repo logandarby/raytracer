@@ -2,11 +2,11 @@
 #define _HITTABLE_H
 
 #include "ray.h"
+#include "bvh/boundingbox.h"
 
 #include <memory>
 
 class Material;
-class BoundingBox;
 struct HitRecord {
     Point p;
     Vec3 normal;
