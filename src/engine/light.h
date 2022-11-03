@@ -8,7 +8,7 @@
 class DiffuseLight : public Material{
 public:
     DiffuseLight(const Color c) :
-        m_emitColor{std::make_shared<Color>(c)}
+        m_emitColor{c}
     {}
 
     virtual bool scatter(
@@ -22,10 +22,10 @@ public:
     }
 
     virtual Color emmitted() const override {
-        return *m_emitColor;
+        return m_emitColor;
     }
 private:
-    std::shared_ptr<Color> m_emitColor;
+    Color m_emitColor;
 };
 
 #endif

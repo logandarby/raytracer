@@ -23,3 +23,23 @@ double randomDouble(const int min, const int max) {
 int randomInt(const int min, const int max) {
     return static_cast<int>(randomDouble(min, max + 1));
 }
+
+static unsigned long x=123456789, y=362436069, z=521288629;
+
+double fastRandomDouble(void) {  //period 2^96-1
+    unsigned long t;
+    x ^= x << 16;
+    x ^= x >> 5;
+    x ^= x << 1;
+
+    t = x;
+    x = y;
+    y = z;
+    z = t ^ x ^ y;
+
+    return (double) z / ULONG_MAX;
+}
+
+double fastRandomDouble(const double min, const double max) {
+    return min + (max-min) * fastRandomDouble();
+}

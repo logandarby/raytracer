@@ -1,5 +1,4 @@
 # vscode
-
 .vscode/*
 .vscode
 
@@ -11,6 +10,13 @@
 *.lo
 *.o
 *.obj
+
+# Profiling Tools
+*.gprof
+gmon.out
+
+# misc
+dud
 
 # Precompiled Headers
 *.gch

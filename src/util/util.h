@@ -12,6 +12,12 @@ const double PI = 3.1415926535897932385;
 
 double degreesToRadians(const double deg);
 
+// Very fast RNG, but not accurate.
+// Returns random number in [0, 1)
+double fastRandomDouble();
+
+double fastRandomDouble(const double min, const double max);
+
 // Returns random number in [0, 1)
 double randomDouble();
 

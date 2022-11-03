@@ -13,18 +13,20 @@ Vec3 Vec3::operator-() const {
 }
 
 double Vec3::operator[](const int i) const {
-    if (i < 0 || i > 2) {
-        throw std::out_of_range("Index of Vec3 must be between 0 and 2 inclusive");
-    }
+    #ifdef DEBUG
+        if (i < 0 || i > 2) {
+            throw std::out_of_range("Index of Vec3 must be between 0 and 2 inclusive");
+        }
+    #endif
     return e[i];
 }
 
-double Vec3::operator[](const int i) {
-    if (i < 0 || i > 2) {
-        throw std::out_of_range("Index of Vec3 must be between 0 and 2 inclusive");
-    }
-    return e[i];
-}
+// double Vec3::operator[](const int i) {
+//     if (i < 0 || i > 2) {
+//         throw std::out_of_range("Index of Vec3 must be between 0 and 2 inclusive");
+//     }
+//     return e[i];
+// }
 
 Vec3& Vec3::operator+=(const Vec3 &v) {
     e[0] += v.x();
@@ -75,11 +77,11 @@ bool Vec3::nearZero() const {
 }
 
 Vec3 Vec3::randomVector() {
-    return Vec3{randomDouble(), randomDouble(), randomDouble()};
+    return Vec3{fastRandomDouble(), fastRandomDouble(), fastRandomDouble()};
 }
 
 Vec3 Vec3::randomVector(const double min, const double max) {
-    return Vec3{randomDouble(min, max), randomDouble(min, max), randomDouble(min, max)};
+    return Vec3{fastRandomDouble(min, max), fastRandomDouble(min, max), fastRandomDouble(min, max)};
 }
 
 Vec3 Vec3::randomInUnitSphere() {

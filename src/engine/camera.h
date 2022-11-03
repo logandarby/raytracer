@@ -46,9 +46,11 @@ public:
     }
 
     Ray getRay(const double s, const double t) {
-        // if (u < 0 || u > 1 || v < 0 || v > 1) {
-        //     throw std::out_of_range("Camera::getRay(" + std::to_string(u) + ", " + std::to_string(v) + ") parameters must be between 0 and 1 inclusive");
-        // } 
+        #ifdef DEBUG
+            if (s < 0 || s > 1 || t < 0 || t > 1) {
+                throw std::out_of_range("Camera::getRay(" + std::to_string(s) + ", " + std::to_string(t) + ") parameters must be between 0 and 1 inclusive");
+            } 
+        #endif
 
         const Vec3 rd = m_lensRadius * Vec3::randomInUnitDisk();
         const Vec3 offset = m_u * rd.x() + m_v * rd.y(); 

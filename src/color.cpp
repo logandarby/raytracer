@@ -20,9 +20,9 @@ void writeColor(std::ostream& out, const Color pixel, const int samplesPerPixel)
 }
 
 Color randomColor() {
-    return Color{randomDouble(), randomDouble(), randomDouble()};
+    return Color{fastRandomDouble(), fastRandomDouble(), fastRandomDouble()};
 }
 
 Color randomColor(const double min, const double max) {
-    return Color{randomDouble(min, max), randomDouble(min, max), randomDouble(min, max)};
+    return Color{fastRandomDouble(min, max), fastRandomDouble(min, max), fastRandomDouble(min, max)};
 }

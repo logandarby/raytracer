@@ -72,7 +72,7 @@ public:
 
         const bool cannotRefract = refractRatio * sintheta > 1.0;
         Vec3 direction;
-        if (cannotRefract || reflectance(costheta, refractRatio) > randomDouble()) {
+        if (cannotRefract || reflectance(costheta, refractRatio) > fastRandomDouble()) {
             // Total internal reflection
             direction = reflect(unitDir, rec.normal);
         } else {

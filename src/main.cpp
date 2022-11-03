@@ -45,8 +45,8 @@ HittableList randomScene() {
 
     // for (int a = -7; a < 7; a+=2) {
     //     for (int b = -7; b < 7; b +=2) {
-    //         auto choose_mat = randomDouble();
-    //         Point center(a + 0.9*randomDouble(), 0.2, b + 0.9*randomDouble());
+    //         auto choose_mat = fastRandomDouble();
+    //         Point center(a + 0.9*fastRandomDouble(), 0.2, b + 0.9*fastRandomDouble());
 
     //         if ((center - Point(4, 0.2, 0)).length() > 0.9) {
     //             shared_ptr<Material> sphere_material;
@@ -59,7 +59,7 @@ HittableList randomScene() {
     //             } else if (choose_mat < 0.95) {
     //                 // metal
     //                 auto albedo = randomColor(0.5, 1);
-    //                 auto fuzz = randomDouble(0, 0.5);
+    //                 auto fuzz = fastRandomDouble(0, 0.5);
     //                 sphere_material = make_shared<Metal>(albedo, fuzz);
     //                 world.add(make_shared<Sphere>(center, 0.2, sphere_material));
     //             } else {
@@ -86,12 +86,13 @@ HittableList randomScene() {
 const bool USE_BVH = false;
 
 int main() {
+
     // Image
     const auto aspectRatio = 3.0 / 2.0;
     const int imageWidth = 300;
     const int imageHeight = static_cast<int>(imageWidth / aspectRatio);
-    const int samplesPerPixel = 2000;
-    const int maxDepth = 50;
+    const int samplesPerPixel = 200;
+    const int maxDepth = 10;
 
     // Camera
     const Point lookfrom{13, 2, 3};
@@ -131,8 +132,8 @@ int main() {
             // antialiasing
             Color pixel{0, 0, 0};
             for (int s = 0; s < samplesPerPixel; s++) {
-                double u = double(i + randomDouble()) / (imageWidth - 1);
-                double v = double(j + randomDouble()) / (imageHeight - 1);
+                double u = double(i + fastRandomDouble()) / (imageWidth - 1);
+                double v = double(j + fastRandomDouble()) / (imageHeight - 1);
                 Ray r = camera.getRay(u, v);
                 pixel += ray_color(r, *finalscene, maxDepth);
             }
@@ -150,4 +151,6 @@ int main() {
     std::cerr << "Time Elapsed in seconds: "
         << std::chrono::duration_cast<std::chrono::seconds>(end - start).count()
         << " seconds\n";
+
+    return EXIT_SUCCESS;
 }

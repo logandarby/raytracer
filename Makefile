@@ -1,7 +1,7 @@
 # Makefile modified from https://www.partow.net/programming/makefile/index.html
 
 CXX      := g++
-CXXFLAGS := -std=c++17 -pedantic-errors -Wall -Wextra -Werror=vla -DDEBUG
+CXXFLAGS := -std=c++17 -pedantic-errors -Wall -Wextra -Werror=vla 
 LDFLAGS  := -L extern/lib
 INCLUDE  := -I extern/include -I ./src
 BUILD    := ./build
@@ -40,6 +40,9 @@ build:
 
 debug: CXXFLAGS += -DDEBUG -g
 debug: all
+
+profile: CXXFLAGS += -pg -O0
+profile: all
 
 release: CXXFLAGS += -O2
 release: all

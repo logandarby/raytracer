@@ -7,12 +7,12 @@
 
 class Vec3 {
 public:
-    Vec3() : 
-        e{ 0, 0, 0 }
-    {}
-    Vec3(double a, double b, double c) :
-        e{a, b, c}
-    {}
+    Vec3() {}
+    Vec3(double a, double b, double c) {
+        e[0] = a;
+        e[1] = b;
+        e[2] = c;
+    }
     
     double x() const { return e[0]; }
     double y() const { return e[1]; }
@@ -20,7 +20,7 @@ public:
 
     Vec3 operator-();
     Vec3 operator-() const;
-    double operator[](const int i);
+    // double operator[](const int i);
     double operator[](const int i) const;
 
     Vec3& operator+=(const Vec3 &v);
@@ -44,7 +44,7 @@ public:
     static Vec3 randomUnitVector();
     static Vec3 randomInUnitDisk();
 private:
-    std::array<double, 3> e;
+    double e[3] = {0, 0, 0};
 };
 
 std::ostream& operator<<(std::ostream &out, const Vec3 &v);
