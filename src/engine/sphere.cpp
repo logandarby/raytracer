@@ -1,4 +1,8 @@
 #include "sphere.h"
+#include "../util/util.h"
+#include "../util/debug.h"
+
+#include <cmath>
 
 // eq for sphere is (P - C) · (P - C) = r^2
 // solving substituting in for P(t) = At + B we get
@@ -29,6 +33,7 @@ bool Sphere::hit(const Ray &r, const double t_min, const double t_max, HitRecord
     rec.materialPtr = m_material;
     const Vec3 outwardNormal = (rec.p - m_center) / m_radius;
     rec.setFaceNormal(r, outwardNormal);
+    getUV(outwardNormal, rec.u, rec.v);
     return true;
 }
 
@@ -38,4 +43,19 @@ bool Sphere::boundingBox(BoundingBox &outputBox) const {
         m_center + m_radius * Vec3{1, 1, 1}
     };
     return true;
+}
+
+// Gets the surface coordinates (in polar) and stores them in u, v
+// as well as normalizing u, v to be in [0, 1]
+// P must be a point on the unit sphere centered at the origin
+// u represents theta up from the -Y axis (max of pi radians)
+// v represents the phi around the Y axis (max of 2pi radians)
+void Sphere::getUV(const Point &p, double &u, double &v) const {
+    debugAssert(p.x() * p.x() + p.y() * p.y() + p.z() * p.z() == 1);
+
+    const double phi = std::atan2(-p.z(), p.x()) + PI;
+    const double theta = std::acos(-p.y());
+    // normalize
+    u = phi / (2 * PI);
+    v = theta / PI;
 }

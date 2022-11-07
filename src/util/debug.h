@@ -1,24 +1,12 @@
 #ifndef _DEBUG_H
 #define _DEBUG_H
 
+// Debug statements that are turned off by defining the DEBUG flag in compiler using -DDEBUG
+
 #include <string>
-#include <iostream>
-#include <assert.h>
 
-void debugPrint(const std::string msg) {
-    #ifdef DEBUG
-        std::cerr << msg;
-    #else
-        (void)msg;
-    #endif
-}
+void debugPrint(const std::string msg);
 
-void debugAssert(const bool assertion) {
-    #ifdef DEBUG
-        assert(assertion);
-    #else
-        (void)assertion;
-    #endif
-}
+void debugAssert(const bool assertion);
 
 #endif

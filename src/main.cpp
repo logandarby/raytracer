@@ -9,7 +9,7 @@
 #include "engine/aarect.h"
 #include "engine/hittableList.h"
 #include "engine/light.h"
-#include "engine/BVH/bvhnode.h"
+#include "engine/bvh.h"
 
 Color ray_color(const Ray& r, const Hittable& scene, const int depth) {
 
@@ -40,7 +40,9 @@ Color ray_color(const Ray& r, const Hittable& scene, const int depth) {
 HittableList randomScene() {
     HittableList world;
 
-    auto ground_material = make_shared<Lambertian>(Color(0.5, 0.5, 0.5));
+    auto check = make_shared<Checkered>();
+    auto ground_material = make_shared<Lambertian>(check);
+    // auto ground_material = make_shared<Lambertian>(Color(0.5, 0.5, 0.5));
     world.add(make_shared<Sphere>(Point(0,-1000,0), 1000, ground_material));
 
     // for (int a = -7; a < 7; a+=2) {
@@ -91,7 +93,7 @@ int main() {
     const auto aspectRatio = 3.0 / 2.0;
     const int imageWidth = 300;
     const int imageHeight = static_cast<int>(imageWidth / aspectRatio);
-    const int samplesPerPixel = 200;
+    const int samplesPerPixel = 30;
     const int maxDepth = 10;
 
     // Camera

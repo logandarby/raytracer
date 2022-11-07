@@ -19,6 +19,8 @@ bool XYRect::hit(const Ray &r, const double t_min, const double t_max, HitRecord
     rec.t = t;
     Vec3 outwardNormal{0, 0, 1};
     rec.setFaceNormal(r, outwardNormal);
+    rec.u = (x_intersect - m_x1) / (m_x2 - m_x1);
+    rec.v = (y_intersect - m_y1) / (m_y2 - m_y1);
     return true;
 }
 
@@ -47,6 +49,8 @@ bool YZRect::hit(const Ray &r, const double t_min, const double t_max, HitRecord
     rec.t = t;
     Vec3 outwardNormal{1, 0, 0};
     rec.setFaceNormal(r, outwardNormal);
+    rec.u = (y_intersect - m_y1) / (m_y2 - m_y1);
+    rec.v = (z_intersect - m_z1) / (m_z2 - m_z1);
     return true;
 }
 
@@ -75,6 +79,8 @@ bool XZRect::hit(const Ray &r, const double t_min, const double t_max, HitRecord
     rec.t = t;
     Vec3 outwardNormal{0, 1, 0};
     rec.setFaceNormal(r, outwardNormal);
+    rec.u = (x_intersect - m_x1) / (m_x2 - m_x1);
+    rec.v = (z_intersect - m_z1) / (m_z2 - m_z1);
     return true;
 }
 

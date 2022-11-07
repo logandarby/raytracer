@@ -8,11 +8,12 @@
 
 class Material;
 struct HitRecord {
-    Point p;
-    Vec3 normal;
-    double t;
-    std::shared_ptr<Material> materialPtr;
-    bool frontFace;
+    Point p;        // intersection point
+    Vec3 normal;    // surface normal (faces against incident ray)
+    double t;       // ray parameter that gives point p
+    double u, v;    // surface coordinates
+    std::shared_ptr<Material> materialPtr;  // material
+    bool frontFace; // true if ray hit the front-face of the object
 
     // Sets the normal to face against the incident ray
     void setFaceNormal(const Ray &r, const Vec3 &outwardNormal) {

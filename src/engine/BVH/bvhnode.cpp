@@ -63,7 +63,7 @@ BVHNode::BVHNode(const HittableList &hitlist, const size_t start, const size_t e
     BoundingBox boxLeft;
     BoundingBox boxRight;
 
-    assert(m_left->boundingBox(boxLeft) && m_right->boundingBox(boxRight));
+    debugAssert(m_left->boundingBox(boxLeft) && m_right->boundingBox(boxRight));
 
     m_boundingbox = BoundingBox::combineBoxes(boxLeft, boxRight);
 }

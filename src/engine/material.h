@@ -2,6 +2,7 @@
 #define _MATERIAL_H
 
 #include "hittable.h"
+#include "texture.h"
 #include "../color.h"
 #include "../util/util.h"
 
@@ -19,7 +20,8 @@ public:
 
 class Lambertian : public Material {
 public:
-    Lambertian(const Color &a) : m_albedo{a} {}
+    Lambertian(const Color &a) : m_albedo{std::make_shared<SolidColor>(a)} {}
+    Lambertian(const std::shared_ptr<Texture> a) : m_albedo{a} {}
 
     virtual bool scatter(
         const Ray &in, const HitRecord &rec, Color &attenuation, Ray &scattered
@@ -33,27 +35,28 @@ public:
         }
 
         scattered = Ray{rec.p, scatterDirection};
-        attenuation = m_albedo;
+        attenuation = m_albedo->value(rec.u, rec.v, rec.p);
         return true;
     }
 private:
-    Color m_albedo;
+    std::shared_ptr<Texture> m_albedo;
 };
 
 class Metal : public Material {
 public:
-    Metal(const Color &a, const double fuzz) : m_albedo{a}, m_fuzz{fuzz} {};
+    Metal(const Color &a, const double fuzz) : m_albedo{std::make_shared<SolidColor>(a)}, m_fuzz{fuzz} {};
+    Metal(const std::shared_ptr<Texture> a, const double fuzz) : m_albedo{a}, m_fuzz{fuzz} {};
 
     virtual bool scatter(
         const Ray &in, const HitRecord &rec, Color &attenuation, Ray &scattered
     ) const override {
         Vec3 refleced = reflect(normalize(in.direction()), rec.normal);
         scattered = Ray{rec.p, refleced + m_fuzz*Vec3::randomInUnitSphere()};
-        attenuation = m_albedo;
+        attenuation = m_albedo->value(rec.u, rec.v, rec.p);
         return dot(scattered.direction(), rec.normal) > 0;
     }
 private:
-    Color m_albedo;
+    std::shared_ptr<Texture> m_albedo;
     double m_fuzz;
 };
 

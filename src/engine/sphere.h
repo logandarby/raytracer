@@ -20,6 +20,11 @@ public:
     bool hit(const Ray &r, const double t_min, const double t_max, HitRecord &rec) const override;
     // Stores the axis-aligned boundingbox in outputBox
     bool boundingBox(BoundingBox &outputBox) const override;
+    // Gets the surface coordinates (in polar) and stores them in u, v.
+    // P must be a point on the unit sphere centered at the origin
+    // u represents theta up from the -Y axis (max of pi radians)
+    // v represents the phi around the Y axis (max of 2pi radians)
+    void getUV(const Point &p, double &u, double &v) const;
 private:
     Point m_center;
     double m_radius;
