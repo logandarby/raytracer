@@ -10,32 +10,7 @@
 #include "engine/hittableList.h"
 #include "engine/light.h"
 #include "engine/bvh.h"
-
-Color ray_color(const Ray& r, const Hittable& scene, const int depth) {
-
-    if (depth <= 0) {
-        return Color{0, 0, 0};
-    }
-
-    HitRecord rec{};
-    if (scene.hit(r, 0.001, DBL_INFINITY, rec)) {
-        Ray scattered;
-        Color attenuation;
-        Color emitted = rec.materialPtr->emmitted();
-
-        if (!rec.materialPtr->scatter(r, rec, attenuation, scattered)) {
-            return emitted;
-        }
-        return emitted + attenuation * ray_color(scattered, scene, depth - 1);
-    }
-
-    // background gradient
-    Vec3 unit_direction = normalize(r.direction());
-    const double t = 0.5*(unit_direction.y() + 1.0);
-    const Color skyColor = (1.0-t)*Color{1.0, 1.0, 1.0} + t*Color{0.5, 0.7, 1.0};
-
-    return V_BLACK + 0.05 * skyColor;
-}
+#include "engine/renderer.h"
 
 HittableList randomScene() {
     HittableList world;
@@ -124,25 +99,13 @@ int main() {
 
     // Render
 
+    Renderer renderer{imageWidth, imageHeight, samplesPerPixel, maxDepth};
+
     auto start = std::chrono::steady_clock::now();
 
     std::cout << "P3\n" << imageWidth << ' ' << imageHeight << "\n255\n";
 
-    for (int j = imageHeight-1; j >= 0; --j) {
-	    std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
-        for (int i = 0; i < imageWidth; ++i) {
-            // antialiasing
-            Color pixel{0, 0, 0};
-            for (int s = 0; s < samplesPerPixel; s++) {
-                double u = double(i + fastRandomDouble()) / (imageWidth - 1);
-                double v = double(j + fastRandomDouble()) / (imageHeight - 1);
-                Ray r = camera.getRay(u, v);
-                pixel += ray_color(r, *finalscene, maxDepth);
-            }
-            writeColor(std::cout, pixel, samplesPerPixel);
-        }
-    }
-    std::cerr << "\nDone\n";
+    renderer.render(*finalscene, camera);   // main render
 
     auto end = std::chrono::steady_clock::now();
 

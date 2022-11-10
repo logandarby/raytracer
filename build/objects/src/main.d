@@ -8,4 +8,4 @@ build/objects/src/main.o: src/main.cpp src/color.h src/vec3.h \
  src/engine/BVH/boundingbox.h src/engine/aarect.h \
  src/engine/hittableList.h src/engine/light.h src/engine/bvh.h \
  src/engine/BVH/bvhnode.h src/engine/BVH/../hittable.h \
- src/engine/BVH/boundingbox.h
+ src/engine/BVH/boundingbox.h src/engine/renderer.h

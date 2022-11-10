@@ -45,7 +45,7 @@ public:
         m_lensRadius = aperture / 2.0;
     }
 
-    Ray getRay(const double s, const double t) {
+    Ray getRay(const double s, const double t) const {
         #ifdef DEBUG
             if (s < 0 || s > 1 || t < 0 || t > 1) {
                 throw std::out_of_range("Camera::getRay(" + std::to_string(s) + ", " + std::to_string(t) + ") parameters must be between 0 and 1 inclusive");
