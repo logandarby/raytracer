@@ -44,7 +44,7 @@ debug: all
 profile: CXXFLAGS += -pg -O0
 profile: all
 
-release: CXXFLAGS += -O2
+release: CXXFLAGS += -O3
 release: all
 
 info:

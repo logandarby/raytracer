@@ -1,7 +1,7 @@
 #ifndef _BVH_NODE_H
 #define _BVH_NODE_H
 
-#include <memory>
+#include "../../pch.h"
 
 #include "../hittable.h"
 #include "boundingbox.h"

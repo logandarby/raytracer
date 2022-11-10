@@ -1,9 +1,7 @@
 #ifndef ___VEC3_H
 #define ___VEC3_H
 
-#include <ostream>
-#include <array>
-#include <cmath>
+#include "pch.h"
 
 class Vec3 {
 public:

@@ -3,8 +3,6 @@
 #include "../../util/debug.h"
 #include "../hittableList.h"
 
-#include <algorithm>
-
 enum {X = 0, Y, Z};
 
 bool boxCompare(const shared_ptr<Hittable> a, const shared_ptr<Hittable> b, const int axis) {

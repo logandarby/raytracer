@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/src/*",
-                "${workspaceFolder}/src/engine/*"
+                "${workspaceFolder}/src/engine/*",
+                "${workspaceFolder}/src"
             ],
             "defines": [
                 "_DEBUG",

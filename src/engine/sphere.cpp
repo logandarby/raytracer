@@ -1,8 +1,8 @@
+#include "../pch.h"
+
 #include "sphere.h"
 #include "../util/util.h"
 #include "../util/debug.h"
-
-#include <cmath>
 
 // eq for sphere is (P - C) · (P - C) = r^2
 // solving substituting in for P(t) = At + B we get

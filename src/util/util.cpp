@@ -1,9 +1,5 @@
 #include "util.h"
 
-#include <bit>
-#include <limits>
-#include <cstdint>
-
 double degreesToRadians(const double deg) {
     return deg * PI / 180.0;
 }

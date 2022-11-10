@@ -1,12 +1,10 @@
 #ifndef _CAMERA_H
 #define _CAMERA_H
 
-#include <stdexcept>
+#include "../pch.h"
 
 #include "../vec3.h"
 #include "ray.h"
-
-#include <string>
 
 class Camera {
 public:

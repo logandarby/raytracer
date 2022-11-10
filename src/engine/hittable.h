@@ -1,10 +1,10 @@
 #ifndef _HITTABLE_H
 #define _HITTABLE_H
 
+#include "../pch.h"
+
 #include "ray.h"
 #include "bvh/boundingbox.h"
-
-#include <memory>
 
 class Material;
 struct HitRecord {

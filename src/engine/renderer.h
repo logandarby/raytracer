@@ -13,11 +13,12 @@ public:
     Renderer(
         const int imageWidth,
         const int imageHeight,
-        const int samplesPerPixel = 20,    // how many rays are shot per pixel
-        const int maxDepth = 10               // maximum times a single ray may be reflected
+        const int samplesPerPixel = 20,     // how many rays are shot per pixel
+        const int maxDepth = 10             // maximum times a single ray may be reflected
     );
 
     void render(const Hittable &scene, const Camera &camera);
+
 private:
     Color traceRay(const Ray &r, const unsigned int depth);
     Color hitColor(const HitRecord &rec);

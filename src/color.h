@@ -1,9 +1,9 @@
 #ifndef _COLOR_H
 #define _COLOR_H
 
-#include "vec3.h"
+#include "pch.h"
 
-#include <ostream>
+#include "vec3.h"
 
 typedef Vec3 Color;
 

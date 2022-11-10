@@ -1,9 +1,5 @@
 #include "debug.h"
 
-#include <string>
-#include <iostream>
-#include <cassert>
-
 void debugPrint(const std::string msg) {
     #ifdef DEBUG
         std::cerr << msg;

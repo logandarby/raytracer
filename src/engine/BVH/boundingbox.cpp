@@ -1,5 +1,6 @@
+#include "../../pch.h"
+
 #include "boundingbox.h"
-#include <algorithm>
 
 bool BoundingBox::hit(const Ray &ray, double t_min, double t_max) const {
     for (int i = 0; i < 3; i++) {

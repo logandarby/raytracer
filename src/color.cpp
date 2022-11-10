@@ -1,6 +1,5 @@
 #include "color.h"
 #include "util/util.h"
-#include <algorithm>
 
 void writeColor(std::ostream& out, const Color pixel, const int samplesPerPixel) {
 

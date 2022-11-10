@@ -1,9 +1,9 @@
 #ifndef _LIGHT_H
 #define _LIGHT_H
 
-#include "material.h"
+#include "../pch.h"
 
-#include <memory>
+#include "material.h"
 
 class DiffuseLight : public Material{
 public:

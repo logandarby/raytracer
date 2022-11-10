@@ -1,10 +1,9 @@
 #ifndef _HITTABLE_LIST_H
 #define _HITTABLE_LIST_H
 
-#include "hittable.h"
+#include "../pch.h"
 
-#include <vector>
-#include <memory>
+#include "hittable.h"
 
 using std::shared_ptr;
 using std::make_shared;

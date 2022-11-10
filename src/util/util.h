@@ -1,9 +1,7 @@
 #ifndef ___UTIL_H
 #define ___UTIL_H
 
-#include <limits>
-#include <cmath>
-#include <random>
+#include "../pch.h"
 
 #include "../vec3.h"
 
