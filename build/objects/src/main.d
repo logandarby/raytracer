@@ -9,4 +9,4 @@ build/objects/src/main.o: src/main.cpp src/pch.h src/color.h src/vec3.h \
  src/engine/hittableList.h src/engine/light.h src/engine/bvh.h \
  src/engine/BVH/bvhnode.h src/engine/BVH/../../pch.h \
  src/engine/BVH/../hittable.h src/engine/BVH/boundingbox.h \
- src/engine/renderer.h
+ src/engine/renderer.h src/view.h

@@ -1,3 +1,7 @@
+#ImGUI
+
+*.ini
+
 # vscode
 .vscode/*
 .vscode
@@ -11,10 +15,6 @@
 *.o
 *.obj
 
-# Profiling Tools
-*.gprof
-gmon.out
-
 # misc
 dud
 
@@ -25,7 +25,6 @@ dud
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
 
 # Fortran module files
 *.mod

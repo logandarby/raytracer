@@ -6,7 +6,10 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/src/*",
                 "${workspaceFolder}/src/engine/*",
-                "${workspaceFolder}/src"
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/dependencies/*",
+                "${workspaceFolder}/dependencies/include/SDL2",
+                "${workspaceFolder}/dependencies/include/ImGUI"
             ],
             "defines": [
                 "_DEBUG",

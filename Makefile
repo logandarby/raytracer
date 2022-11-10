@@ -2,8 +2,8 @@
 
 CXX      := g++
 CXXFLAGS := -std=c++20 -pedantic-errors -Wall -Wextra -Werror=vla 
-LDFLAGS  := -L extern/lib
-INCLUDE  := -I extern/include -I ./src
+LDFLAGS  := -L dependencies/lib -lmingw32 -lSDL2main -lSDL2 -lgdi32 -lopengl32 -limm32 
+INCLUDE  := -I dependencies/include/ImGUI -I dependencies/include/ImGUI/backends -I dependencies/include/SDL2 -I ./src
 BUILD    := ./build
 OBJ_DIR  := $(BUILD)/objects
 APP_DIR  := .
@@ -12,6 +12,7 @@ SRC      := $(wildcard src/*.cpp) \
 	$(wildcard src/engine/*.cpp) \
 	$(wildcard src/engine/BVH/*.cpp) \
 	$(wildcard src/util/*.cpp) \
+	$(wildcard dependencies/include/ImGUI/*.cpp) \
 
 OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 DEPENDS=${OBJECTS:.o=.d}
