@@ -8,10 +8,12 @@ BUILD    := ./build
 OBJ_DIR  := $(BUILD)/objects
 APP_DIR  := .
 EXEC     := program
-SRC      := $(wildcard src/*.cpp) \
+SRC      := \
+	$(wildcard src/*.cpp) \
+	$(wildcard src/common/*.cpp) \
+	$(wildcard src/util/*.cpp) \
 	$(wildcard src/engine/*.cpp) \
 	$(wildcard src/engine/BVH/*.cpp) \
-	$(wildcard src/util/*.cpp) \
 	$(wildcard dependencies/include/ImGUI/*.cpp) \
 
 OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)

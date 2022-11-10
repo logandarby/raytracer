@@ -1,7 +1,7 @@
 #ifndef _DEBUG_H
 #define _DEBUG_H
 
-#include "../pch.h"
+#include "common/pch.h"
 
 // Debug statements that are turned off by defining the DEBUG flag in compiler using -DDEBUG
 

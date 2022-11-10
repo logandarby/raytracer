@@ -1,9 +1,9 @@
 #ifndef ___UTIL_H
 #define ___UTIL_H
 
-#include "../pch.h"
+#include "common/pch.h"
 
-#include "../vec3.h"
+#include "common/vec3.h"
 
 const double DBL_INFINITY = std::numeric_limits<double>::infinity();
 const double PI = 3.1415926535897932385;

@@ -1,10 +1,10 @@
-#include "pch.h"
+#include "common/pch.h"
 
 #include "renderer.h"
 #include "ray.h"
 #include "hittable.h"
 #include "camera.h"
-#include "../util/util.h"
+#include "util/util.h"
 
 Renderer::Renderer(
     const int imageWidth,

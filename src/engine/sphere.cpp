@@ -1,4 +1,4 @@
-#include "../pch.h"
+#include "common/pch.h"
 
 #include "sphere.h"
 #include "../util/util.h"

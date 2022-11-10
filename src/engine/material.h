@@ -3,8 +3,8 @@
 
 #include "hittable.h"
 #include "texture.h"
-#include "../color.h"
-#include "../util/util.h"
+#include "common/color.h"
+#include "util/util.h"
 
 struct Ray;
 

@@ -1,9 +1,9 @@
 #ifndef _CAMERA_H
 #define _CAMERA_H
 
-#include "../pch.h"
+#include "common/pch.h"
 
-#include "../vec3.h"
+#include "common/vec3.h"
 #include "ray.h"
 
 class Camera {

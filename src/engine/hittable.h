@@ -1,7 +1,7 @@
 #ifndef _HITTABLE_H
 #define _HITTABLE_H
 
-#include "../pch.h"
+#include "common/pch.h"
 
 #include "ray.h"
 #include "bvh/boundingbox.h"

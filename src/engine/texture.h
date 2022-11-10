@@ -1,7 +1,7 @@
 #ifndef _TEXTURE_H
 #define _TEXTURE_H
 
-#include "color.h"
+#include "common/color.h"
 
 class Texture {
 public:

@@ -1,7 +1,7 @@
 #ifndef _BOUNDING_BOX_H
 #define _BOUNDING_BOX_H
 
-#include "../../vec3.h"
+#include "common/vec3.h"
 #include "../ray.h"
 
 class BoundingBox {
