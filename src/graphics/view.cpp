@@ -2,7 +2,6 @@
 
 #include "view.h"
 
-#include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_sdlrenderer.h"
 #include <SDL.h>
@@ -13,10 +12,12 @@
 #endif
 
 bool View::Create(std::shared_ptr<RenderOptions> defaultRenderOptions) {
+    m_renderOptions = defaultRenderOptions;
+
     // Setup SDL
     // (Some versions of SDL before <2.0.10 appears to have performance/stalling issues on a minority of Windows systems,
     // depending on whether SDL_INIT_GAMECONTROLLER is enabled or disabled.. updating to the latest version of SDL is recommended!)
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
     {
         std::cerr << "Error: " << SDL_GetError() << std::endl;
         return false;
@@ -24,18 +25,33 @@ bool View::Create(std::shared_ptr<RenderOptions> defaultRenderOptions) {
 
     // Setup window
     SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
-    m_window = SDL_CreateWindow("Dear ImGui SDL2+SDL_Renderer example", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+    m_window = SDL_CreateWindow("Raytracer", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
 
     // Setup SDL_Renderer instance
-    m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+    m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
     if (m_renderer == NULL)
     {
         SDL_Log("Error creating SDL_Renderer!");
+        SDL_LogError(0, SDL_GetError());
         return false;
     }
-    //SDL_RendererInfo info;
-    //SDL_GetRendererInfo(renderer, &info);
-    //SDL_Log("Current SDL_Renderer: %s", info.name);
+    SDL_RendererInfo info;
+    SDL_GetRendererInfo(m_renderer, &info);
+    SDL_Log("Current window SDL_Renderer: %s", info.name);
+
+    // Set up SDL Texture for rendering, and its associated renderer
+    // SDL_Surface *surface = IMG_Load("images/checkerboard.png");
+    // if (surface == NULL) {
+    //     std::cerr << "ERROR: Could not load checkerboard image" << std::endl;
+    // }
+    // m_texture = SDL_CreateTextureFromSurface(m_renderer, surface);
+    // SDL_FreeSurface(surface);
+    m_texture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 200, 200);
+    if (!m_texture) {
+        SDL_Log("Could not create blank texture!");
+        SDL_LogError(0, SDL_GetError());
+    }
+    
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -67,8 +83,6 @@ bool View::Create(std::shared_ptr<RenderOptions> defaultRenderOptions) {
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != NULL);
-
-    m_renderOptions = defaultRenderOptions;
 
     return true;
 }
@@ -181,10 +195,35 @@ void View::OptionsPanel() {
     if (ImGui::CollapsingHeader("Quality", collpasingHeaderFlags)) {
         ImGui::DragInt("Samples Per Pixel", &m_renderOptions->samplesPerPixel, 1.0f, 1, INT_INFINITY, "%d", sliderFlags);
         ImGui::DragInt("Max Depth", &m_renderOptions->maxDepth, 1.0f, 1, INT_INFINITY, "%d", sliderFlags);
+        if (ImGui::InputInt("Image Width", &m_renderOptions->imageWidth)) {
+            m_renderOptions->updateHeight();
+        }
+        if (ImGui::InputInt("Image Height", &m_renderOptions->imageHeight)) {
+            m_renderOptions->updateWidth();
+        }
+        ImGui::Checkbox("Landspace", &m_renderOptions->landscape);
+
+        // Aspect Ratio dropdown
+        static AspectRatio& selectedKey = m_renderOptions->aspectRatio;
+        const std::string selectedName = getAspectRatioName.at(selectedKey);
+        if (ImGui::BeginCombo("Aspect Ratio", selectedName.c_str())) {
+            for (auto &[key, val] : getAspectRatioName) {
+                const bool isSelected = selectedKey == key;
+                if (ImGui::Selectable(val.c_str(), isSelected)) {
+                        selectedKey = key;
+                        m_renderOptions->applyAspectRatio();
+                }
+
+                // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+                if (isSelected)
+                    ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
     }
     if (ImGui::CollapsingHeader("Camera", collpasingHeaderFlags)) {
-        ImGui::InputFloat3("Look From Point", m_renderOptions->lookFrom, "%.1f");
-        ImGui::InputFloat3("Look At Point", m_renderOptions->lookAt, "%.1f");
+        ImGui::InputDouble3("Look From Point", m_renderOptions->lookFrom.data(), "%.1f");
+        ImGui::InputDouble3("Look At Point", m_renderOptions->lookAt.data(), "%.1f");
         ImGui::DragFloat("FOV", &m_renderOptions->fov, 0.0, 5.0, 90.0, "%.1f", sliderFlags);
         ImGui::DragFloat("Focus Distance", &m_renderOptions->focusDistance, 0.5, 0.0, FLT_INFINITY, "%.1f", sliderFlags);
         ImGui::DragFloat("Aperture", &m_renderOptions->aperture, 0.1, 0.0, FLT_INFINITY, "%.1f", sliderFlags);
@@ -205,6 +244,30 @@ void View::RenderPanel() {
     ImGui::Text("Render");
     ImGui::Spacing();
     ImGui::Separator();
+
+    int w, h;
+    SDL_QueryTexture(m_texture, NULL, NULL, &w, &h);
+    // if (m_renderOptions->landscape) {
+    //     w = m_renderOptions->imageWidth;
+    //     h = m_renderOptions->imageHeight;
+    // } else {
+    //     h = m_renderOptions->imageWidth;
+    //     w = m_renderOptions->imageHeight;
+    // }
+
+    int category = SDL_SetRenderTarget(m_renderer, m_texture);
+    if (category < 0) {
+        SDL_LogError(category, SDL_GetError());
+    }
+
+    SDL_Rect rect{0, 0, 100, 100};
+    SDL_SetRenderDrawColor(m_renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRect(m_renderer, &rect);
+
+    ImGui::Image(m_texture, ImVec2{(float)w, (float)h});
+
+    SDL_SetRenderTarget(m_renderer, NULL);
+
 }
 
 void View::AppMenuBar() {
@@ -232,4 +295,12 @@ void View::AppMenuBar() {
         }
         ImGui::EndMainMenuBar();
     }
+}
+
+bool ImGui::InputDouble2(const char* label, double v[2], const char* format , ImGuiInputTextFlags flags) {
+    return ImGui::InputScalarN(label, ImGuiDataType_Double, v, 2, NULL, NULL, format, flags);
+}
+
+bool ImGui::InputDouble3(const char* label, double v[3], const char* format , ImGuiInputTextFlags flags) {
+    return ImGui::InputScalarN(label, ImGuiDataType_Double, v, 3, NULL, NULL, format, flags);
 }

@@ -6,15 +6,28 @@
 class Vec3 {
 public:
     Vec3() {}
-    Vec3(double a, double b, double c) {
+    Vec3(const double a, const double b, const double c) {
         e[0] = a;
         e[1] = b;
         e[2] = c;
+    }
+    Vec3(const double v3[3]) {
+        e[0] = v3[0];
+        e[1] = v3[1];
+        e[2] = v3[2];
+    }
+    Vec3(const float v3[3]) {
+        e[0] = (double) v3[0];
+        e[1] = (double) v3[1];
+        e[2] = (double) v3[2];
     }
     
     double x() const { return e[0]; }
     double y() const { return e[1]; }
     double z() const { return e[2]; }
+
+    double *data() { return &e[0]; }
+    double const *data() const { return &e[0]; }
 
     Vec3 operator-();
     Vec3 operator-() const;
