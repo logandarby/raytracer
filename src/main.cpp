@@ -1,5 +1,6 @@
 #include "common/pch.h"
 
+#include "common/renderOptions.h"
 #include "util/util.h"
 #include "engine/camera.h"
 #include "engine/bvh.h"

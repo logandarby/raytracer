@@ -192,7 +192,10 @@ void View::OptionsPanel() {
             m_renderOptions->updateWidth();
             updateTextureDimensions();
         }
-        ImGui::Checkbox("Landspace", &m_renderOptions->landscape);
+        if (ImGui::Checkbox("Landspace", &m_renderOptions->landscape)) {
+            m_renderOptions->swapWidthAndHeight();
+            updateTextureDimensions();
+        }
 
         // Aspect Ratio dropdown
         static AspectRatio& selectedKey = m_renderOptions->aspectRatio;
@@ -236,7 +239,8 @@ void View::OptionsPanel() {
 void View::RenderPanel() {
 
     static ImGuiWindowFlags renderWindowFlags = 
-        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove;
+        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove
+        | ImGuiWindowFlags_AlwaysHorizontalScrollbar;
 
     if (!ImGui::BeginChild("Render", ImGui::GetContentRegionAvail(), false, renderWindowFlags)) {
         ImGui::EndChild();
