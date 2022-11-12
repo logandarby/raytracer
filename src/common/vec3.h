@@ -22,9 +22,13 @@ public:
         e[2] = (double) v3[2];
     }
     
-    double x() const { return e[0]; }
-    double y() const { return e[1]; }
-    double z() const { return e[2]; }
+    double const &x() const { return e[0]; }
+    double const &y() const { return e[1]; }
+    double const &z() const { return e[2]; }
+
+    double &x() { return e[0]; }
+    double &y() { return e[1]; }
+    double &z() { return e[2]; }
 
     double *data() { return &e[0]; }
     double const *data() const { return &e[0]; }
@@ -32,7 +36,8 @@ public:
     Vec3 operator-();
     Vec3 operator-() const;
     // double operator[](const int i);
-    double operator[](const int i) const;
+    double const &operator[](const int i) const;
+    double &operator[](const int i);
 
     Vec3& operator+=(const Vec3 &v);
     Vec3& operator-=(const Vec3 &v);

@@ -1,8 +1,16 @@
 #include "color.h"
 #include "util/util.h"
 
-void writeColor(std::ostream& out, const Color pixel, const int samplesPerPixel) {
+Color convertToRGB(const Color pixel) {
 
+    double r = static_cast<int>(256 * std::clamp(pixel.x(), 0.0, 0.999));
+    double g = static_cast<int>(256 * std::clamp(pixel.y(), 0.0, 0.999));
+    double b = static_cast<int>(256 * std::clamp(pixel.z(), 0.0, 0.999));
+
+    return Color{r, g, b};
+}
+
+Color normalizePixel(const Color pixel, const int samplesPerPixel) {
     double r = pixel.x();
     double g = pixel.y();
     double b = pixel.z();
@@ -13,9 +21,16 @@ void writeColor(std::ostream& out, const Color pixel, const int samplesPerPixel)
     g = sqrt(scale * g);
     b = sqrt(scale * b);
 
-    out << static_cast<int>(256 * std::clamp(r, 0.0, 0.999)) << ' '
-        << static_cast<int>(256 * std::clamp(g, 0.0, 0.999)) << ' '
-        << static_cast<int>(256 * std::clamp(b, 0.0, 0.999)) << std::endl;
+    return Color{r, g, b};
+}
+
+void writeColor(std::ostream& out, const Color pixel, const int samplesPerPixel) {
+
+    const Color rgbPixel = convertToRGB(normalizePixel(pixel, samplesPerPixel));
+
+    out << rgbPixel.x() << ' '
+        << rgbPixel.y() << ' '
+        << rgbPixel.z() << std::endl;
 }
 
 Color randomColor() {

@@ -12,7 +12,7 @@ Vec3 Vec3::operator-() const {
     return Vec3{-1 * e[0], -1 * e[1], -1 * e[2]};
 }
 
-double Vec3::operator[](const int i) const {
+double const &Vec3::operator[](const int i) const {
     #ifdef DEBUG
         if (i < 0 || i > 2) {
             throw std::out_of_range("Index of Vec3 must be between 0 and 2 inclusive");
@@ -20,6 +20,16 @@ double Vec3::operator[](const int i) const {
     #endif
     return e[i];
 }
+
+double &Vec3::operator[](const int i) {
+    #ifdef DEBUG
+        if (i < 0 || i > 2) {
+            throw std::out_of_range("Index of Vec3 must be between 0 and 2 inclusive");
+        }
+    #endif
+    return e[i];
+}
+
 
 // double Vec3::operator[](const int i) {
 //     if (i < 0 || i > 2) {

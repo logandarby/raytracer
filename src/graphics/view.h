@@ -4,6 +4,7 @@
 #include "common/pch.h"
 #include "common/vec3.h"
 #include "imgui.h"
+#include "textureStream.h"
 
 class SDL_Window;
 class SDL_Renderer;
@@ -82,11 +83,14 @@ private:
     void RenderPanel();
     void AppMenuBar();
     void MainWindow();
+    // updates dimensions of texture based off RenderOptions
+    bool updateTextureDimensions();
 private:
     SDL_Window* m_window;
     SDL_Renderer* m_renderer;
-    SDL_Texture* m_texture;
     std::shared_ptr<RenderOptions> m_renderOptions = nullptr;
+
+    TextureStream m_tStream;
 
     bool m_showOptionsPanel = true;
     bool m_showRenderPanel = true;
