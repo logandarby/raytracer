@@ -12,6 +12,7 @@ SRC      := \
 	$(wildcard src/*.cpp) \
 	$(wildcard src/common/*.cpp) \
 	$(wildcard src/util/*.cpp) \
+	$(wildcard src/graphics/*.cpp) \
 	$(wildcard src/engine/*.cpp) \
 	$(wildcard src/engine/BVH/*.cpp) \
 	$(wildcard dependencies/include/ImGUI/*.cpp) \

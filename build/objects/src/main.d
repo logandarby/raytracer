@@ -7,4 +7,4 @@ build/objects/src/main.o: src/main.cpp src/common/pch.h \
  src/util/util.h src/engine/BVH/boundingbox.h src/engine/aarect.h \
  src/engine/hittableList.h src/engine/light.h src/engine/bvh.h \
  src/engine/BVH/bvhnode.h src/engine/BVH/../hittable.h \
- src/engine/BVH/boundingbox.h src/engine/renderer.h src/view.h
+ src/engine/BVH/boundingbox.h src/engine/renderer.h src/graphics/view.h

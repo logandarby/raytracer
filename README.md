@@ -4,4 +4,6 @@ Following Peter Shirley's Raytracing series to slowly iterate on and upgrade a c
 
 ## Installation
 
-There are no libraries, so you can just clone the source code and run `make` (be sure to use bash).
+Make sure SDL2 is installed.
+
+Clone the source code and run `make` (be sure to use bash).

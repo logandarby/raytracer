@@ -61,14 +61,14 @@ HittableList randomScene() {
 
 const bool USE_BVH = false;
 
-#include "view.h"
+#include "graphics/view.h"
 
 int main(int, char**) {
 
+    auto renderOptions = make_shared<RenderOptions>();
     View view;
-    view.Create();
+    view.Create(renderOptions);
     view.Run();
-    view.Destroy();
     return EXIT_SUCCESS;
 
 

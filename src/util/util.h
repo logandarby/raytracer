@@ -6,6 +6,9 @@
 #include "common/vec3.h"
 
 const double DBL_INFINITY = std::numeric_limits<double>::infinity();
+const float FLT_INFINITY = std::numeric_limits<float>::infinity();
+const int INT_INFINITY = INT_MAX;
+
 const double PI = 3.1415926535897932385;
 
 double degreesToRadians(const double deg);

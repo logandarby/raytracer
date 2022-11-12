@@ -1,22 +1,24 @@
+#include "common/pch.h"
+
 #include "view.h"
 
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_sdlrenderer.h"
-#include <stdio.h>
 #include <SDL.h>
+#include "util/util.h"
 
 #if !SDL_VERSION_ATLEAST(2,0,17)
 #error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
 #endif
 
-bool View::Create() {
+bool View::Create(std::shared_ptr<RenderOptions> defaultRenderOptions) {
     // Setup SDL
     // (Some versions of SDL before <2.0.10 appears to have performance/stalling issues on a minority of Windows systems,
     // depending on whether SDL_INIT_GAMECONTROLLER is enabled or disabled.. updating to the latest version of SDL is recommended!)
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
     {
-        printf("Error: %s\n", SDL_GetError());
+        std::cerr << "Error: " << SDL_GetError() << std::endl;
         return false;
     }
 
@@ -66,10 +68,12 @@ bool View::Create() {
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != NULL);
 
+    m_renderOptions = defaultRenderOptions;
+
     return true;
 }
 
-void View::Destroy() {
+View::~View() {
     // Cleanup
     ImGui_ImplSDLRenderer_Shutdown();
     ImGui_ImplSDL2_Shutdown();
@@ -82,8 +86,6 @@ void View::Destroy() {
 
 void View::Run() {
     // Our state
-    bool show_demo_window = true;
-    bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     // Main loop
@@ -110,42 +112,10 @@ void View::Run() {
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-
-        // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-
-            ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-            ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-            ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox("Another Window", &show_another_window);
-
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-            if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text("counter = %d", counter);
-
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
-
-        // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
-                show_another_window = false;
-            ImGui::End();
-        }
+        AppMenuBar();
+        MainWindow();
+        if(m_showDemoWindow)
+            ImGui::ShowDemoWindow(&m_showDemoWindow);
 
         // Rendering
         ImGui::Render();
@@ -153,5 +123,113 @@ void View::Run() {
         SDL_RenderClear(m_renderer);
         ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
         SDL_RenderPresent(m_renderer);
+    }
+}
+
+void View::MainWindow() {
+    static ImGuiWindowFlags mainWindowFlags =
+        ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDecoration |
+        ImGuiWindowFlags_NoSavedSettings;
+    static ImGuiTableFlags mainTableFlags = 
+        ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersInnerV;
+
+    ImGuiViewport *viewport = ImGui::GetMainViewport();
+    auto optionsWidth = viewport->WorkSize.x/4;
+
+    ImGui::SetNextWindowSize(viewport->WorkSize);
+    ImGui::SetNextWindowPos(viewport->WorkPos);
+    ImGui::Begin("MainWindow", NULL, mainWindowFlags);
+
+    ImGui::BeginTable("mainSplit", 2, mainTableFlags);
+    ImGui::TableSetupColumn("Options", ImGuiTableColumnFlags_WidthFixed, optionsWidth);
+    {   
+        // Options Panel
+        ImGui::TableNextRow();
+        ImGui::TableSetColumnIndex(0);
+        OptionsPanel();
+    }
+    {
+        // Render Panel
+        ImGui::TableSetColumnIndex(1);
+        RenderPanel();
+    }
+
+    ImGui::EndTable();
+    ImGui::End();
+}
+
+void View::OptionsPanel() {
+    static ImGuiWindowFlags window_flags = 
+        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove;
+
+    static ImGuiTreeNodeFlags collpasingHeaderFlags =
+        ImGuiTreeNodeFlags_DefaultOpen;
+
+    static ImGuiSliderFlags sliderFlags = 
+        ImGuiSliderFlags_AlwaysClamp;
+
+
+    // ImGuiViewport* viewport = ImGui::GetMainViewport();
+
+    if(!ImGui::BeginChild("Options", ImGui::GetContentRegionAvail(), false, window_flags)) {
+        ImGui::EndChild();
+        return;
+    }
+    ImGui::Text("Options");
+    ImGui::Spacing();
+    ImGui::Separator();
+    if (ImGui::CollapsingHeader("Quality", collpasingHeaderFlags)) {
+        ImGui::DragInt("Samples Per Pixel", &m_renderOptions->samplesPerPixel, 1.0f, 1, INT_INFINITY, "%d", sliderFlags);
+        ImGui::DragInt("Max Depth", &m_renderOptions->maxDepth, 1.0f, 1, INT_INFINITY, "%d", sliderFlags);
+    }
+    if (ImGui::CollapsingHeader("Camera", collpasingHeaderFlags)) {
+        ImGui::InputFloat3("Look From Point", m_renderOptions->lookFrom, "%.1f");
+        ImGui::InputFloat3("Look At Point", m_renderOptions->lookAt, "%.1f");
+        ImGui::DragFloat("FOV", &m_renderOptions->fov, 0.0, 5.0, 90.0, "%.1f", sliderFlags);
+        ImGui::DragFloat("Focus Distance", &m_renderOptions->focusDistance, 0.5, 0.0, FLT_INFINITY, "%.1f", sliderFlags);
+        ImGui::DragFloat("Aperture", &m_renderOptions->aperture, 0.1, 0.0, FLT_INFINITY, "%.1f", sliderFlags);
+    }
+    
+    ImGui::Spacing();
+
+    if(ImGui::Button("Render")) {
+        // Render the image
+        std::cout << "pressed" << std::endl;
+    }
+
+    ImGui::EndChild();
+
+}
+
+void View::RenderPanel() {
+    ImGui::Text("Render");
+    ImGui::Spacing();
+    ImGui::Separator();
+}
+
+void View::AppMenuBar() {
+    /*
+    TOOLBAR:
+        FILE:
+            - export image >
+                - ppm
+                - jpg
+                - png
+        TOOLS:
+            - tool menu in the demo window
+    */
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            if (ImGui::MenuItem("Export Image", "CTRL+E")) {}
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("View"))
+        {
+            if (ImGui::MenuItem("Demo Window", NULL, &m_showDemoWindow)) {}
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
     }
 }
