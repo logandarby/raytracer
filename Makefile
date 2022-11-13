@@ -7,7 +7,12 @@ INCLUDE  := -I dependencies/include/ImGUI -I dependencies/include/ImGUI/backends
 BUILD    := ./build
 OBJ_DIR  := $(BUILD)/objects
 APP_DIR  := .
-EXEC     := program
+EXEC	 := program
+PCH_SRC	 := \
+	$(wildcard dependencies/include/ImGUI/*.h) \
+	$(wildcard dependencies/include/SDL2/SDL.h) \
+	$(wildcard dependencies/include/SDL2/SDL_image.h) \
+	$(wildcard src/common/pch.h) 
 SRC      := \
 	$(wildcard src/*.cpp) \
 	$(wildcard src/common/*.cpp) \
@@ -15,7 +20,7 @@ SRC      := \
 	$(wildcard src/graphics/*.cpp) \
 	$(wildcard src/engine/*.cpp) \
 	$(wildcard src/engine/BVH/*.cpp) \
-	$(wildcard dependencies/include/ImGUI/*.cpp) \
+	$(wildcard dependencies/include/ImGUI/*.cpp) 
 
 OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 DEPENDS=${OBJECTS:.o=.d}
@@ -33,10 +38,12 @@ $(APP_DIR)/$(EXEC): $(OBJECTS)
 -include ${DEPENDS}
 
 .PHONY: clean
-
 clean:
 	-@rm -rvf $(OBJ_DIR)/*
 	-@rm -vf $(APP_DIR)/$(EXEC).exe
+
+precompile: $(PCH_SRC)
+	$(CXX) $(CXXFLAGS) $^
 
 build:
 	@mkdir -p $(APP_DIR)
@@ -48,12 +55,13 @@ debug: all
 profile: CXXFLAGS += -pg -O0
 profile: all
 
-release: CXXFLAGS += -O3
+release: CXXFLAGS += -O3 -DNDEBUG
 release: all
 
 info:
 	@echo "[*] Application dir: ${APP_DIR}     "
 	@echo "[*] Object dir:      ${OBJ_DIR}     "
 	@echo "[*] Sources:         ${SRC}         "
+	@echo "[*] Precompiled Headers: ${PCH_SRC} "
 	@echo "[*] Objects:         ${OBJECTS}     "
 	@echo "[*] Dependencies:    ${DEPENDENCIES}"
