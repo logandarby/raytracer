@@ -129,6 +129,11 @@ void View::Run() {
     }
 }
 
+TextureStream &View::getTextureStream() {
+    return m_tStream;
+}
+
+
 void View::MainWindow() {
     static ImGuiWindowFlags mainWindowFlags =
         ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDecoration |
@@ -229,7 +234,7 @@ void View::OptionsPanel() {
 
     if(ImGui::Button("Render")) {
         // Render the image
-        std::cout << "pressed" << std::endl;
+        std::cout << "pressed render" << std::endl;
     }
 
     ImGui::EndChild();
@@ -280,7 +285,15 @@ void View::AppMenuBar() {
     {
         if (ImGui::BeginMenu("File"))
         {
-            if (ImGui::MenuItem("Export Image", "CTRL+E")) {}
+            if (ImGui::BeginMenu("Export Image")) {
+                if(ImGui::MenuItem("Save PNG")) {
+                    m_tStream.saveTexture((randomName() + ".png").c_str(), IMAGEFORMAT_PNG);
+                }
+                if(ImGui::MenuItem("Save JPG")) {
+                    m_tStream.saveTexture((randomName() + ".jpg").c_str(), IMAGEFORMAT_JPG);
+                }
+                ImGui::EndMenu();
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("View"))

@@ -24,6 +24,15 @@ int randomInt(const int min, const int max) {
     return static_cast<int>(randomDouble(min, max + 1));
 }
 
+std::string randomName() {
+    auto time = std::chrono::system_clock::now();
+    int64_t minutesSinceEpoch = 
+        std::chrono::duration_cast<std::chrono::minutes>(
+            time.time_since_epoch()
+        ).count();
+    return std::to_string(randomInt(100, 999)) + "_" + std::to_string(minutesSinceEpoch);
+}
+
 static unsigned long x=123456789, y=362436069, z=521288629;
 
 double fastRandomDouble(void) {  //period 2^96-1

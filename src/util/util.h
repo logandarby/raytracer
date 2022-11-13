@@ -28,6 +28,9 @@ double randomDouble(const double min, const double max);
 // Return random int in [min, max]
 int randomInt(const int min, const int max);
 
+// Returns a random name based off the current time
+std::string randomName();
+
 // Super fast inverse square root
 float fastInvSqrt(float number);
 

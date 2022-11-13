@@ -22,6 +22,9 @@ public:
     ~View();
     bool Create(std::shared_ptr<RenderOptions> defaultRenderOptions);
     void Run();
+    // Return a reference to the texture stream.
+    // operator<< can be used on it to add pixel data to the window render.
+    TextureStream &getTextureStream();
 private:
     void OptionsPanel();
     void RenderPanel();

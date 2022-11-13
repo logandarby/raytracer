@@ -7,6 +7,12 @@
 
 class SDL_Renderer;
 class SDL_Texture;
+class SDL_Surface;
+
+enum ImageFormat {
+    IMAGEFORMAT_PNG,
+    IMAGEFORMAT_JPG
+};
 
 class TextureStream {
 public:
@@ -17,6 +23,7 @@ public:
     bool resize(const int width, const int height);
     void drawDebugRect();
     SDL_Texture *getSDLTexture();
+    void saveTexture(const char* file_name, ImageFormat iformat = IMAGEFORMAT_PNG);
 
     // Add next RGB pixel
     TextureStream& operator<<(const Color rgbPixel);

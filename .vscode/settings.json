@@ -48,6 +48,7 @@
         "ctime": "cpp",
         "ratio": "cpp",
         "sstream": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "map": "cpp"
     }
 }

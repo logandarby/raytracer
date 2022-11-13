@@ -2,7 +2,7 @@
 
 CXX      := g++
 CXXFLAGS := -std=c++20 -pedantic-errors -Wall -Wextra -Werror=vla 
-LDFLAGS  := -L dependencies/lib -lmingw32 -lSDL2main -lSDL2 -lgdi32 -lopengl32 -limm32 
+LDFLAGS  := -L dependencies/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lgdi32 -lopengl32 -limm32 
 INCLUDE  := -I dependencies/include/ImGUI -I dependencies/include/ImGUI/backends -I dependencies/include/SDL2 -I ./src
 BUILD    := ./build
 OBJ_DIR  := $(BUILD)/objects

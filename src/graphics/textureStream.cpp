@@ -3,6 +3,7 @@
 #include "common/pch.h"
 #include "util/debug.h"
 #include <SDL.h>
+#include <SDL_image.h>
 
 void TextureStream::Create(SDL_Renderer *renderer, const int width, const int height) {
     debugAssert(renderer != nullptr);
@@ -73,6 +74,22 @@ void TextureStream::resetPixelIndex() {
 SDL_Texture *TextureStream::getSDLTexture() {
     return m_texture;
 }
+
+void TextureStream::saveTexture(const char* file_name, ImageFormat iformat) {
+    SDL_Texture* target = SDL_GetRenderTarget(m_renderer);
+    SDL_SetRenderTarget(m_renderer, m_texture);
+    int width, height;
+    SDL_QueryTexture(m_texture, NULL, NULL, &width, &height);
+    SDL_Surface* surface = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+    SDL_RenderReadPixels(m_renderer, NULL, surface->format->format, surface->pixels, surface->pitch);
+    if (iformat == IMAGEFORMAT_PNG)
+        IMG_SavePNG(surface, file_name);
+    else if (iformat == IMAGEFORMAT_JPG)
+        IMG_SaveJPG(surface, file_name, 60);
+    SDL_FreeSurface(surface);
+    SDL_SetRenderTarget(m_renderer, target);
+}
+
 
 
 void TextureStream::drawDebugRect() {
