@@ -259,7 +259,7 @@ void View::RenderPanel() {
     for (int i = 0; i < 1000; i++) {
         m_tStream << Color(0, 0, 255); 
     }
-    auto texture = m_tStream.getSDLTexture();
+    auto texture = m_tStream.readSDLTexture();
     int w, h;
     SDL_QueryTexture(texture, NULL, NULL, &w, &h);
     ImGui::Image(texture, ImVec2{

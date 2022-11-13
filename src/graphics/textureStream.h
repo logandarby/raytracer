@@ -22,7 +22,7 @@ public:
     bool addPixel(const Color rgbPixel, const int x, const int y);
     bool resize(const int width, const int height);
     void drawDebugRect();
-    SDL_Texture *getSDLTexture();
+    SDL_Texture *readSDLTexture();
     void saveTexture(const char* file_name, ImageFormat iformat = IMAGEFORMAT_PNG);
 
     // Add next RGB pixel

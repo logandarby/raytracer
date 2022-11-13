@@ -34,15 +34,15 @@ static const std::map<AspectRatio, std::string> getAspectRatioName{
 
 struct RenderOptions {
     // Quality
-    int samplesPerPixel = 30;
+    int samplesPerPixel = 10;
     int maxDepth = 10;
     // Image sizing
-    int imageWidth = 1280;
-    int imageHeight = 720;
+    int imageWidth = 300;
+    int imageHeight = 200;
     bool landscape = true;
-    AspectRatio aspectRatio = ASPECTRATIO_16_9;
+    AspectRatio aspectRatio = ASPECTRATIO_3_2;
     // Camera
-    Vec3 lookFrom{0, 0, 2};
+    Vec3 lookFrom{13, 2, 3};
     Vec3 lookAt{0, 0, 0};
     float fov = 25;
     float focusDistance = 10;

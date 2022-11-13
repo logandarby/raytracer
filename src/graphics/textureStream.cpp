@@ -71,7 +71,7 @@ void TextureStream::resetPixelIndex() {
     m_pixelIndex = 0;
 }
 
-SDL_Texture *TextureStream::getSDLTexture() {
+SDL_Texture *TextureStream::readSDLTexture() {
     return m_texture;
 }
 
