@@ -25,7 +25,7 @@ bool View::Create(std::shared_ptr<RenderOptions> defaultRenderOptions) {
 
     // Setup window
     SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
-    m_window = SDL_CreateWindow("Raytracer", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+    m_window = SDL_CreateWindow("Raytracer", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 450, 600, window_flags);
 
     // Setup SDL_Renderer instance
     m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
@@ -38,9 +38,6 @@ bool View::Create(std::shared_ptr<RenderOptions> defaultRenderOptions) {
     SDL_RendererInfo info;
     SDL_GetRendererInfo(m_renderer, &info);
     SDL_Log("Current window SDL_Renderer: %s", info.name);
-
-    // Initialize texture stream
-    m_tStream.Create(m_renderer, m_renderOptions->imageWidth, m_renderOptions->imageHeight);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -133,47 +130,22 @@ void View::Run() {
     }
 }
 
-TextureStream &View::getTextureStream() {
-    return m_tStream;
-}
-
 
 void View::MainWindow() {
     static ImGuiWindowFlags mainWindowFlags =
         ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDecoration |
         ImGuiWindowFlags_NoSavedSettings;
-    static ImGuiTableFlags mainTableFlags = 
-        ImGuiTableFlags_Resizable | ImGuiTableFlags_BordersInnerV;
 
     ImGuiViewport *viewport = ImGui::GetMainViewport();
-    auto optionsWidth = viewport->WorkSize.x/4;
 
     ImGui::SetNextWindowSize(viewport->WorkSize);
     ImGui::SetNextWindowPos(viewport->WorkPos);
     ImGui::Begin("MainWindow", NULL, mainWindowFlags);
-
-    ImGui::BeginTable("mainSplit", 2, mainTableFlags);
-    ImGui::TableSetupColumn("Options", ImGuiTableColumnFlags_WidthFixed, optionsWidth);
-    {   
-        // Options Panel
-        ImGui::TableNextRow();
-        ImGui::TableSetColumnIndex(0);
-        OptionsPanel();
-    }
-    {
-        // Render Panel
-        ImGui::TableSetColumnIndex(1);
-        RenderPanel();
-    }
-
-    ImGui::EndTable();
+    OptionsPanel();
     ImGui::End();
 }
 
 void View::OptionsPanel() {
-    static ImGuiWindowFlags window_flags = 
-        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove;
-
     static ImGuiTreeNodeFlags collpasingHeaderFlags =
         ImGuiTreeNodeFlags_CollapsingHeader | ImGuiTreeNodeFlags_DefaultOpen;
 
@@ -182,10 +154,6 @@ void View::OptionsPanel() {
 
     static FieldModifyEvent renderOptionsFieldModify{"renderOptionsField"};
 
-    if(!ImGui::BeginChild("Options", ImGui::GetContentRegionAvail(), false, window_flags)) {
-        ImGui::EndChild();
-        return;
-    }
     ImGui::Text("Options");
     ImGui::Spacing();
     ImGui::Separator();
@@ -255,38 +223,6 @@ void View::OptionsPanel() {
         ButtonPressEvent event{"render"};
         m_eventCallbackFn(event);
     }
-
-    ImGui::EndChild();
-
-}
-
-void View::RenderPanel() {
-
-    static ImGuiWindowFlags renderWindowFlags = 
-        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove
-        | ImGuiWindowFlags_AlwaysHorizontalScrollbar;
-
-    if (!ImGui::BeginChild("Render", ImGui::GetContentRegionAvail(), false, renderWindowFlags)) {
-        ImGui::EndChild();
-        return;
-    }
-
-    ImGui::Text("Render");
-    ImGui::Spacing();
-    ImGui::Separator();
-
-    for (int i = 0; i < 1000; i++) {
-        m_tStream << Color(0, 0, 255); 
-    }
-    auto texture = m_tStream.readSDLTexture();
-    int w, h;
-    SDL_QueryTexture(texture, NULL, NULL, &w, &h);
-    ImGui::Image(texture, ImVec2{
-        (float) w,
-        (float) h
-    });
-
-    ImGui::EndChild();
 }
 
 void View::AppMenuBar() {
@@ -302,19 +238,19 @@ void View::AppMenuBar() {
     */
     if (ImGui::BeginMainMenuBar())
     {
-        if (ImGui::BeginMenu("File"))
-        {
-            if (ImGui::BeginMenu("Export Image")) {
-                if(ImGui::MenuItem("Save PNG")) {
-                    m_tStream.saveTexture((randomName() + ".png").c_str(), IMAGEFORMAT_PNG);
-                }
-                if(ImGui::MenuItem("Save JPG")) {
-                    m_tStream.saveTexture((randomName() + ".jpg").c_str(), IMAGEFORMAT_JPG);
-                }
-                ImGui::EndMenu();
-            }
-            ImGui::EndMenu();
-        }
+        // if (ImGui::BeginMenu("File"))
+        // {
+        //     if (ImGui::BeginMenu("Export Image")) {
+        //         if(ImGui::MenuItem("Save PNG")) {
+        //             m_tStream.saveTexture((randomName() + ".png").c_str(), IMAGEFORMAT_PNG);
+        //         }
+        //         if(ImGui::MenuItem("Save JPG")) {
+        //             m_tStream.saveTexture((randomName() + ".jpg").c_str(), IMAGEFORMAT_JPG);
+        //         }
+        //         ImGui::EndMenu();
+        //     }
+        //     ImGui::EndMenu();
+        // }
         if (ImGui::BeginMenu("View"))
         {
             if (ImGui::MenuItem("Demo Window", NULL, &m_showDemoWindow)) {}
@@ -326,8 +262,6 @@ void View::AppMenuBar() {
 
 bool View::updateTextureAndRenderer() {
     static FieldModifyEvent fieldOptionsMofidy{"fieldOptionsModify"};
-    bool resizeSuccess = m_tStream.resize(m_renderOptions->imageWidth, m_renderOptions->imageHeight);
-    if (!resizeSuccess) return false;
     m_eventCallbackFn(fieldOptionsMofidy);
     return true;
 }

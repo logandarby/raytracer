@@ -4,7 +4,6 @@
 #include "common/pch.h"
 #include "common/renderOptions.h"
 #include "imgui.h"
-#include "textureStream.h"
 #include "event/event.h"
 
 class SDL_Window;
@@ -24,12 +23,8 @@ public:
     bool Create(std::shared_ptr<RenderOptions> defaultRenderOptions);
     void Run();
     void setEventCallback(const EventCallbackFn& func) { m_eventCallbackFn = func; }
-    // Return a reference to the texture stream.
-    // operator<< can be used on it to add pixel data to the window render.
-    TextureStream &getTextureStream();
 private:
     void OptionsPanel();
-    void RenderPanel();
     void AppMenuBar();
     void MainWindow();
     // updates dimensions of texture based off RenderOptions
@@ -38,8 +33,6 @@ private:
     SDL_Window* m_window;
     SDL_Renderer* m_renderer;
     std::shared_ptr<RenderOptions> m_renderOptions = nullptr;
-
-    TextureStream m_tStream;
 
     EventCallbackFn m_eventCallbackFn;
 

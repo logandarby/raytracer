@@ -3,7 +3,6 @@
 #include "engine/hittableList.h"
 #include "engine/bvh.h"
 #include "scene.h"
-#include "graphics/PPMstream.h"
 
 #define BIND_CLASS_FN(eventFunc) std::bind(&Application::eventFunc, this, std::placeholders::_1)
 
