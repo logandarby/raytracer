@@ -18,14 +18,24 @@ Renderer::Renderer(
     m_maxDepth{maxDepth}
 {}
 
+void Renderer::stop() {
+    m_running = false;
+    std::cerr << "Renderer Stopped" << std::endl;
+}
+
+bool Renderer::isRunning() {
+    return m_running;
+}
+
 
 void Renderer::render(const Hittable &scene, const Camera &camera) {
+    m_running = true;
     m_activeCamera = &camera;
     m_activeScene = &scene;
 
-    for (int j = m_imageHeight - 1; j >= 0; --j) {
+    for (int j = m_imageHeight - 1; j >= 0 && m_running; --j) {
 	    std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
-        for (int i = 0; i < m_imageWidth; ++i) {
+        for (int i = 0; i < m_imageWidth && m_running; ++i) {
             // antialiasing
             Color pixel{0, 0, 0};
             for (int s = 0; s < m_samplesPerPixel; s++) {

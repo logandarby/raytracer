@@ -104,10 +104,14 @@ void View::Run() {
         while (SDL_PollEvent(&event))
         {
             ImGui_ImplSDL2_ProcessEvent(&event);
-            if (event.type == SDL_QUIT)
+            if (
+                event.type == SDL_QUIT ||
+                (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(m_window))
+            ) {
                 done = true;
-            if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(m_window))
-                done = true;
+                static WindowCloseEvent event;
+                m_eventCallbackFn(event);
+            }
         }
 
         // Start the Dear ImGui frame
@@ -176,8 +180,7 @@ void View::OptionsPanel() {
     static ImGuiSliderFlags sliderFlags = 
         ImGuiSliderFlags_AlwaysClamp;
 
-
-    // ImGuiViewport* viewport = ImGui::GetMainViewport();
+    static FieldModifyEvent renderOptionsFieldModify{"renderOptionsField"};
 
     if(!ImGui::BeginChild("Options", ImGui::GetContentRegionAvail(), false, window_flags)) {
         ImGui::EndChild();
@@ -187,19 +190,23 @@ void View::OptionsPanel() {
     ImGui::Spacing();
     ImGui::Separator();
     if (ImGui::CollapsingHeader("Quality", collpasingHeaderFlags)) {
-        ImGui::DragInt("Samples Per Pixel", &m_renderOptions->samplesPerPixel, 1.0f, 1, INT_INFINITY, "%d", sliderFlags);
-        ImGui::DragInt("Max Depth", &m_renderOptions->maxDepth, 1.0f, 1, INT_INFINITY, "%d", sliderFlags);
+        if (ImGui::DragInt("Samples Per Pixel", &m_renderOptions->samplesPerPixel, 1.0f, 1, INT_INFINITY, "%d", sliderFlags)) {
+            updateTextureAndRenderer();
+        }
+        if (ImGui::DragInt("Max Depth", &m_renderOptions->maxDepth, 1.0f, 1, INT_INFINITY, "%d", sliderFlags)) {
+            updateTextureAndRenderer();
+        }
         if (ImGui::InputInt("Image Width", &m_renderOptions->imageWidth)) {
             m_renderOptions->updateHeight();
-            updateTextureDimensions();
+            updateTextureAndRenderer();
         }
         if (ImGui::InputInt("Image Height", &m_renderOptions->imageHeight)) {
             m_renderOptions->updateWidth();
-            updateTextureDimensions();
+            updateTextureAndRenderer();
         }
         if (ImGui::Checkbox("Landspace", &m_renderOptions->landscape)) {
             m_renderOptions->swapWidthAndHeight();
-            updateTextureDimensions();
+            updateTextureAndRenderer();
         }
 
         // Aspect Ratio dropdown
@@ -211,7 +218,7 @@ void View::OptionsPanel() {
                 if (ImGui::Selectable(val.c_str(), isSelected)) {
                         selectedKey = key;
                         m_renderOptions->applyAspectRatio();
-                        updateTextureDimensions();
+                        updateTextureAndRenderer();
                 }
 
                 // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
@@ -223,18 +230,30 @@ void View::OptionsPanel() {
     }
     ImGui::Spacing();
     if (ImGui::CollapsingHeader("Camera", collpasingHeaderFlags)) {
-        ImGui::InputDouble3("Look From Point", m_renderOptions->lookFrom.data(), "%.1f");
-        ImGui::InputDouble3("Look At Point", m_renderOptions->lookAt.data(), "%.1f");
-        ImGui::DragFloat("FOV", &m_renderOptions->fov, 0.0, 5.0, 90.0, "%.1f", sliderFlags);
-        ImGui::DragFloat("Focus Distance", &m_renderOptions->focusDistance, 0.5, 0.0, FLT_INFINITY, "%.1f", sliderFlags);
-        ImGui::DragFloat("Aperture", &m_renderOptions->aperture, 0.1, 0.0, FLT_INFINITY, "%.1f", sliderFlags);
+        if (ImGui::InputDouble3("Look From Point", m_renderOptions->lookFrom.data(), "%.1f")) {
+            updateTextureAndRenderer();
+        }
+        if (ImGui::InputDouble3("Look At Point", m_renderOptions->lookAt.data(), "%.1f")) {
+            updateTextureAndRenderer();
+        }
+        if (ImGui::DragFloat("FOV", &m_renderOptions->fov, 0.0, 5.0, 90.0, "%.1f", sliderFlags)) {
+            updateTextureAndRenderer();
+        }
+        if (ImGui::DragFloat("Focus Distance", &m_renderOptions->focusDistance, 0.5, 0.0, FLT_INFINITY, "%.1f", sliderFlags)) {
+            updateTextureAndRenderer();
+        }
+        if (ImGui::DragFloat("Aperture", &m_renderOptions->aperture, 0.1, 0.0, FLT_INFINITY, "%.1f", sliderFlags)) {
+            updateTextureAndRenderer();
+        }
     }
     
     ImGui::Spacing();
 
     if(ImGui::Button("Render")) {
         // Render the image
-        std::cout << "pressed render" << std::endl;
+        // std::err << "pressed render" << std::endl;
+        ButtonPressEvent event{"render"};
+        m_eventCallbackFn(event);
     }
 
     ImGui::EndChild();
@@ -305,8 +324,12 @@ void View::AppMenuBar() {
     }
 }
 
-bool View::updateTextureDimensions() {
-    return m_tStream.resize(m_renderOptions->imageWidth, m_renderOptions->imageHeight);
+bool View::updateTextureAndRenderer() {
+    static FieldModifyEvent fieldOptionsMofidy{"fieldOptionsModify"};
+    bool resizeSuccess = m_tStream.resize(m_renderOptions->imageWidth, m_renderOptions->imageHeight);
+    if (!resizeSuccess) return false;
+    m_eventCallbackFn(fieldOptionsMofidy);
+    return true;
 }
 
 

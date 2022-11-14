@@ -6,7 +6,8 @@
 enum class EventType {
     MousePress, MouseRelease, MouseMove,
     KeyPress, KeyRelease,
-    ButtonPress
+    ButtonPress, FieldMofify,
+    WindowClose,
 };
 
 // Used to set the EventType statically of the class statically, but also dynamically for the parent Event class.
@@ -40,14 +41,27 @@ using EventCallbackFn = std::function<void(Event&)>;
 
 
 class ButtonPressEvent : public Event {
-
-    SET_EVENTTYPE(EventType::ButtonPress);
-
+    SET_EVENTTYPE(EventType::ButtonPress)
 public:
-    ButtonPressEvent(std::string ID) : m_buttonID{ID} {}
-    std::string getButtonID() const { return m_buttonID; };
+    ButtonPressEvent(const std::string ID) : m_buttonID{ID} {}
+    std::string getButtonID() const { return m_buttonID; }
 private:
     const std::string m_buttonID;
+};
+
+
+class WindowCloseEvent : public Event {
+    SET_EVENTTYPE(EventType::WindowClose)
+};
+
+
+class FieldModifyEvent : public Event {
+    SET_EVENTTYPE(EventType::FieldMofify)
+public:
+    FieldModifyEvent(const std::string ID) : m_fieldID{ID} {}
+    std::string getFieldID() const { return m_fieldID; }
+private:
+    const std::string m_fieldID;
 };
 
 #endif

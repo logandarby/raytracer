@@ -7,6 +7,6 @@
 int main(int, char**) {
 
     Application app;
-    app.Render();
+    app.Run();
 
 }

@@ -18,6 +18,8 @@ public:
     );
 
     void render(const Hittable &scene, const Camera &camera);
+    void stop();
+    bool isRunning();
 
 private:
     Color traceRay(const Ray &r, const unsigned int depth);
@@ -31,6 +33,9 @@ private:
     int m_imageHeight;
     int m_samplesPerPixel;
     int m_maxDepth;
+
+    // For threading
+    volatile bool m_running = false;
 };
 
 #endif
