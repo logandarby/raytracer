@@ -4,7 +4,7 @@ Following Peter Shirley's Raytracing series to slowly iterate on and upgrade a c
 
 ## Installation
 
-Foe Windows x86, clone the source code and run `make` (be sure to use bash).
+For Windows x86, first clone the source code. Run `make precompile` first, and then run `make` (be sure to use bash).
 
 ## Use
 

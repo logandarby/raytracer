@@ -1,18 +1,14 @@
 # Makefile modified from https://www.partow.net/programming/makefile/index.html
 
 CXX      := g++
-CXXFLAGS := -std=c++20 -pedantic-errors -Wall -Wextra -Werror=vla 
+CXXFLAGS := -std=c++20 -pedantic-errors -Wall -Wextra -Werror=vla
 LDFLAGS  := -L dependencies/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lgdi32 -lopengl32 -limm32 
 INCLUDE  := -I dependencies/include/ImGUI -I dependencies/include/ImGUI/backends -I dependencies/include/SDL2 -I ./src
 BUILD    := ./build
 OBJ_DIR  := $(BUILD)/objects
 APP_DIR  := .
 EXEC	 := program
-PCH_SRC	 := \
-	$(wildcard dependencies/include/ImGUI/*.h) \
-	$(wildcard dependencies/include/SDL2/SDL.h) \
-	$(wildcard dependencies/include/SDL2/SDL_image.h) \
-	$(wildcard src/common/pch.h) 
+PCH_SRC	 := $(wildcard src/common/pch.h) 
 SRC      := \
 	$(wildcard src/*.cpp) \
 	$(wildcard src/common/*.cpp) \
@@ -29,7 +25,7 @@ all: build $(APP_DIR)/$(EXEC)
 
 $(OBJ_DIR)/%.o: %.cpp
 	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -MMD -o $@
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -include $(PCH_SRC) -c $< -MMD -o $@
 
 $(APP_DIR)/$(EXEC): $(OBJECTS)
 	@mkdir -p $(@D)
@@ -43,7 +39,7 @@ clean:
 	-@rm -vf $(APP_DIR)/$(EXEC).exe
 
 precompile: $(PCH_SRC)
-	$(CXX) $(CXXFLAGS) $^
+	$(CXX) $(CXXFLAGS) $(INCLUDE) $^
 
 build:
 	@mkdir -p $(APP_DIR)
@@ -65,3 +61,6 @@ info:
 	@echo "[*] Precompiled Headers: ${PCH_SRC} "
 	@echo "[*] Objects:         ${OBJECTS}     "
 	@echo "[*] Dependencies:    ${DEPENDENCIES}"
+
+header: CXXFLAGS += -H
+header: all
