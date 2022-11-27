@@ -4,6 +4,7 @@
 
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_sdlrenderer.h"
+#include "misc/cpp/imgui_stdlib.h"
 #include <SDL.h>
 #include "util/util.h"
 
@@ -157,6 +158,11 @@ void View::OptionsPanel() {
     ImGui::Text("Options");
     ImGui::Spacing();
     ImGui::Separator();
+
+    if (ImGui::CollapsingHeader("File", collpasingHeaderFlags)) {
+        ImGui::InputText("File name", &m_renderOptions->filename);
+    }
+
     if (ImGui::CollapsingHeader("Quality", collpasingHeaderFlags)) {
         if (ImGui::DragInt("Samples Per Pixel", &m_renderOptions->samplesPerPixel, 1.0f, 1, INT_INFINITY, "%d", sliderFlags)) {
             updateTextureAndRenderer();

@@ -5,6 +5,8 @@
 
 #include "common/vec3.h"
 
+#include <string>
+
 enum AspectRatio {
     ASPECTRATIO_16_9 = 0,
     ASPECTRATIO_1_1,
@@ -33,6 +35,8 @@ static const std::map<AspectRatio, std::string> getAspectRatioName{
 };
 
 struct RenderOptions {
+    static constexpr std::string NO_FILENAME = "";
+
     // Quality
     int samplesPerPixel = 10;
     int maxDepth = 10;
@@ -47,6 +51,7 @@ struct RenderOptions {
     float fov = 25;
     float focusDistance = 10;
     float aperture = 0.1;
+    std::string filename = "dud.ppm";
 
     void applyAspectRatio() {
         updateHeight();

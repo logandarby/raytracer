@@ -17,7 +17,8 @@ SRC      := \
 	$(wildcard src/graphics/*.cpp) \
 	$(wildcard src/engine/*.cpp) \
 	$(wildcard src/engine/BVH/*.cpp) \
-	$(wildcard dependencies/include/ImGUI/*.cpp) 
+	$(wildcard dependencies/include/ImGUI/*.cpp) \
+	$(wildcard dependencies/include/ImGUI/misc/cpp/*.cpp) 
 
 OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 DEPENDS=${OBJECTS:.o=.d}

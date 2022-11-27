@@ -65,7 +65,13 @@ void Application::Render() {
     const int maxDepth = m_renderOptions->maxDepth;
 
     // Renderer Output
-    PPMStream ppmstream{imageWidth, imageHeight, randomName()};
+    std::string filename = m_renderOptions->filename;
+    if (filename == RenderOptions::NO_FILENAME) {
+        filename = randomName() + ".ppm";
+    } else if (filename.substr(filename.size() - 4) != ".ppm") {
+        filename += ".ppm";
+    }
+    PPMStream ppmstream{imageWidth, imageHeight, filename};
 
     // Camera
     const Point lookfrom = m_renderOptions->lookFrom;
