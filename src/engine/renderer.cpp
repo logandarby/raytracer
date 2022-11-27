@@ -5,6 +5,7 @@
 #include "hittable.h"
 #include "camera.h"
 #include "util/util.h"
+#include "common/colorStreams/colorStream.h"
 
 Renderer::Renderer(
     const int imageWidth,
@@ -28,7 +29,7 @@ bool Renderer::isRunning() {
 }
 
 
-void Renderer::render(const Hittable &scene, const Camera &camera) {
+void Renderer::render(const Hittable &scene, const Camera &camera, ColorStream& csout) {
     m_running = true;
     m_activeCamera = &camera;
     m_activeScene = &scene;
@@ -44,7 +45,7 @@ void Renderer::render(const Hittable &scene, const Camera &camera) {
                 Ray r = m_activeCamera->getRay(u, v);
                 pixel += traceRay(r, m_maxDepth);
             }
-            writeColor(std::cout, pixel, m_samplesPerPixel);
+            writeColor(csout, pixel, m_samplesPerPixel);
         }
     }
 }

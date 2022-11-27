@@ -3,6 +3,7 @@
 #include "engine/hittableList.h"
 #include "engine/bvh.h"
 #include "scene.h"
+#include "common/colorStreams/ppmStream.h"
 
 #define BIND_CLASS_FN(eventFunc) std::bind(&Application::eventFunc, this, std::placeholders::_1)
 
@@ -63,6 +64,9 @@ void Application::Render() {
     const int samplesPerPixel = m_renderOptions->samplesPerPixel;
     const int maxDepth = m_renderOptions->maxDepth;
 
+    // Renderer Output
+    PPMStream ppmstream{imageWidth, imageHeight, randomName()};
+
     // Camera
     const Point lookfrom = m_renderOptions->lookFrom;
     const Point lookat = m_renderOptions->lookAt;
@@ -87,9 +91,7 @@ void Application::Render() {
 
     auto start = std::chrono::steady_clock::now();
 
-    std::cout << "P3\n" << imageWidth << ' ' << imageHeight << "\n255\n";
-
-    m_renderer.render(*finalscene, camera);   // main render
+    m_renderer.render(*finalscene, camera, ppmstream);   // main render
 
     auto end = std::chrono::steady_clock::now();
 

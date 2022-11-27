@@ -7,6 +7,7 @@ class Hittable;
 class Camera;
 class HitRecord;
 class Ray;
+class ColorStream;
 
 class Renderer {
 public:
@@ -17,7 +18,7 @@ public:
         const int maxDepth = 10             // maximum times a single ray may be reflected
     );
 
-    void render(const Hittable &scene, const Camera &camera);
+    void render(const Hittable &scene, const Camera &camera, ColorStream& csout);
     void stop();
     bool isRunning();
 

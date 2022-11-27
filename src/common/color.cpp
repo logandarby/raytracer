@@ -1,4 +1,5 @@
 #include "color.h"
+#include "colorStreams/colorStream.h"
 #include "util/util.h"
 
 Color convertToRGB(const Color pixel) {
@@ -24,13 +25,10 @@ Color normalizePixel(const Color pixel, const int samplesPerPixel) {
     return Color{r, g, b};
 }
 
-void writeColor(std::ostream& out, const Color pixel, const int samplesPerPixel) {
+void writeColor(ColorStream& csout, const Color pixel, const int samplesPerPixel) {
 
     const Color rgbPixel = convertToRGB(normalizePixel(pixel, samplesPerPixel));
-
-    out << rgbPixel.x() << ' '
-        << rgbPixel.y() << ' '
-        << rgbPixel.z() << std::endl;
+    csout << rgbPixel;
 }
 
 Color randomColor() {

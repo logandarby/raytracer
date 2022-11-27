@@ -12,6 +12,7 @@ PCH_SRC	 := $(wildcard src/common/pch.h)
 SRC      := \
 	$(wildcard src/*.cpp) \
 	$(wildcard src/common/*.cpp) \
+	$(wildcard src/common/colorStreams/*.cpp) \
 	$(wildcard src/util/*.cpp) \
 	$(wildcard src/graphics/*.cpp) \
 	$(wildcard src/engine/*.cpp) \
