@@ -54,6 +54,7 @@ void Renderer::render(const Hittable &scene, const Camera &camera, ColorStream& 
 
 Color Renderer::traceRay(const Ray& r, const unsigned int depth) {
 
+
     if (depth <= 0) {
         return Color{0, 0, 0};
     }

@@ -28,33 +28,33 @@ HittableList randomScene() {
     // auto ground_material = make_shared<Lambertian>(Color(0.5, 0.5, 0.5));
     world.add(make_shared<Sphere>(Point(0,-1000,0), 1000, ground_material));
 
-    // for (int a = -7; a < 7; a+=2) {
-    //     for (int b = -7; b < 7; b +=2) {
-    //         auto choose_mat = fastRandomDouble();
-    //         Point center(a + 0.9*fastRandomDouble(), 0.2, b + 0.9*fastRandomDouble());
+    for (int a = -7; a < 7; a+=2) {
+        for (int b = -7; b < 7; b +=2) {
+            auto choose_mat = fastRandomDouble();
+            Point center(a + 0.9*fastRandomDouble(), 0.2, b + 0.9*fastRandomDouble());
 
-    //         if ((center - Point(4, 0.2, 0)).length() > 0.9) {
-    //             shared_ptr<Material> sphere_material;
+            if ((center - Point(4, 0.2, 0)).length() > 0.9) {
+                shared_ptr<Material> sphere_material;
 
-    //             if (choose_mat < 0.8) {
-    //                 // diffuse
-    //                 auto albedo = randomColor() * randomColor();
-    //                 sphere_material = make_shared<Lambertian>(albedo);
-    //                 world.add(make_shared<Sphere>(center, 0.2, sphere_material));
-    //             } else if (choose_mat < 0.95) {
-    //                 // metal
-    //                 auto albedo = randomColor(0.5, 1);
-    //                 auto fuzz = fastRandomDouble(0, 0.5);
-    //                 sphere_material = make_shared<Metal>(albedo, fuzz);
-    //                 world.add(make_shared<Sphere>(center, 0.2, sphere_material));
-    //             } else {
-    //                 // glass
-    //                 sphere_material = make_shared<Dielectric>(1.5);
-    //                 world.add(make_shared<Sphere>(center, 0.2, sphere_material));
-    //             }
-    //         }
-    //     }
-    // }
+                if (choose_mat < 0.8) {
+                    // diffuse
+                    auto albedo = randomColor() * randomColor();
+                    sphere_material = make_shared<Lambertian>(albedo);
+                    world.add(make_shared<Sphere>(center, 0.2, sphere_material));
+                } else if (choose_mat < 0.95) {
+                    // metal
+                    auto albedo = randomColor(0.5, 1);
+                    auto fuzz = fastRandomDouble(0, 0.5);
+                    sphere_material = make_shared<Metal>(albedo, fuzz);
+                    world.add(make_shared<Sphere>(center, 0.2, sphere_material));
+                } else {
+                    // glass
+                    sphere_material = make_shared<Dielectric>(1.5);
+                    world.add(make_shared<Sphere>(center, 0.2, sphere_material));
+                }
+            }
+        }
+    }
 
     auto material1 = make_shared<Dielectric>(1.5);
     world.add(make_shared<Sphere>(Point(0, 1, 0), 1.0, material1));

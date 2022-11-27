@@ -57,6 +57,7 @@ profile: CXXFLAGS += -pg -O0
 profile: all
 
 release: CXXFLAGS += -O3 -DNDEBUG
+release: precompile
 release: all
 
 info:

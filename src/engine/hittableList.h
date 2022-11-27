@@ -15,6 +15,7 @@ public:
 
     void add(shared_ptr<Hittable> object) { m_objects.push_back(object); }
     void clear() { m_objects.clear(); }
+    int size() { return m_objects.size(); }
 
     virtual bool hit(const Ray &r, const double t_min, const double t_max, HitRecord &rec) const override;
     virtual bool boundingBox(BoundingBox &outputBox) const override;

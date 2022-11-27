@@ -4,6 +4,7 @@
 #include "engine/bvh.h"
 #include "scene.h"
 #include "common/colorStreams/jpgStream.h"
+#include "util/debug.h"
 
 #define BIND_CLASS_FN(eventFunc) std::bind(&Application::eventFunc, this, std::placeholders::_1)
 
@@ -87,10 +88,11 @@ void Application::Render() {
     HittableList scene = createScene();
     
     Hittable *finalscene = &scene;
-
-    if(m_USE_BVH) {
-        BVHNode sceneObjectTree{scene};
-        finalscene  = &sceneObjectTree;
+    BVHNode sceneObjectTree{scene};
+    if(scene.size() >= m_BVH_ITEM_CUTOFF) {
+        // create bvh
+        std::cout << "Using BVH" << std::endl;
+        finalscene = &sceneObjectTree;
     }
 
     // Render

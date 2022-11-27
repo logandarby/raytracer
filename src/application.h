@@ -31,7 +31,8 @@ private:
     std::thread m_renderThread;
     std::mutex m_renderMutex;
 
-    bool m_USE_BVH = false;
+    // # of items where the scene will use a Boundingn Volume Heirarchy
+    const static int m_BVH_ITEM_CUTOFF = 15;
 };
 
 
