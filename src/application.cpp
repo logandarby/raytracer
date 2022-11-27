@@ -3,7 +3,7 @@
 #include "engine/hittableList.h"
 #include "engine/bvh.h"
 #include "scene.h"
-#include "common/colorStreams/ppmStream.h"
+#include "common/colorStreams/jpgStream.h"
 
 #define BIND_CLASS_FN(eventFunc) std::bind(&Application::eventFunc, this, std::placeholders::_1)
 
@@ -65,13 +65,15 @@ void Application::Render() {
     const int maxDepth = m_renderOptions->maxDepth;
 
     // Renderer Output
+    const std::string extension = ".jpg";
     std::string filename = m_renderOptions->filename;
     if (filename == RenderOptions::NO_FILENAME) {
-        filename = randomName() + ".ppm";
-    } else if (filename.substr(filename.size() - 4) != ".ppm") {
-        filename += ".ppm";
-    }
-    PPMStream ppmstream{imageWidth, imageHeight, filename};
+        filename = randomName() + extension;
+    } 
+    // else if (filename.substr(filename.size() - 4) != extension) {
+    //     filename += extension;
+    // }
+    JPGStream imageStream{imageWidth, imageHeight, filename};
 
     // Camera
     const Point lookfrom = m_renderOptions->lookFrom;
@@ -97,7 +99,7 @@ void Application::Render() {
 
     auto start = std::chrono::steady_clock::now();
 
-    m_renderer.render(*finalscene, camera, ppmstream);   // main render
+    m_renderer.render(*finalscene, camera, imageStream);   // main render
 
     auto end = std::chrono::steady_clock::now();
 

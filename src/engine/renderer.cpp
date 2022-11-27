@@ -48,6 +48,8 @@ void Renderer::render(const Hittable &scene, const Camera &camera, ColorStream& 
             writeColor(csout, pixel, m_samplesPerPixel);
         }
     }
+
+    csout.exportImage();
 }
 
 Color Renderer::traceRay(const Ray& r, const unsigned int depth) {

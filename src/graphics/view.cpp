@@ -160,7 +160,7 @@ void View::OptionsPanel() {
     ImGui::Separator();
 
     if (ImGui::CollapsingHeader("File", collpasingHeaderFlags)) {
-        ImGui::InputText("File name", &m_renderOptions->filename);
+        ImGui::InputTextWithHint("File name", "Enter file name", &m_renderOptions->filename);
     }
 
     if (ImGui::CollapsingHeader("Quality", collpasingHeaderFlags)) {

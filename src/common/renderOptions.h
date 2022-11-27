@@ -3,9 +3,9 @@
 
 // A struct to hold render options, and aspect ratio tools.
 
-#include "common/vec3.h"
+#include "common/pch.h"
 
-#include <string>
+#include "common/vec3.h"
 
 enum AspectRatio {
     ASPECTRATIO_16_9 = 0,
@@ -51,7 +51,7 @@ struct RenderOptions {
     float fov = 25;
     float focusDistance = 10;
     float aperture = 0.1;
-    std::string filename = "dud.ppm";
+    std::string filename = NO_FILENAME;
 
     void applyAspectRatio() {
         updateHeight();

@@ -14,6 +14,7 @@
 #include <cstdint>
 #include <cassert>
 #include <stdexcept>
+#include <fstream>
 
 #include <array>
 #include <vector>

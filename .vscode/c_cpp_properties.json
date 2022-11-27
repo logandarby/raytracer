@@ -7,7 +7,8 @@
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/dependencies/include/SDL2",
                 "${workspaceFolder}/dependencies/include/ImGUI",
-                "${workspaceFolder}/src"
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/dependencies/include/stb"
             ],
             "defines": [
                 "_DEBUG",

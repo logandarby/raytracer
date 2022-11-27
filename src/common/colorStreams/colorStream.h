@@ -11,6 +11,7 @@ class ColorStream {
 public:
     virtual ~ColorStream() = default;
     virtual void operator<<(Color rgbPixel) = 0;
+    virtual void exportImage() = 0;
 };
 
 #endif

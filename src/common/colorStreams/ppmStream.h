@@ -3,10 +3,9 @@
 #ifndef _PPM_STREAM_H
 #define _PPM_STREAM_H
 
-#include "colorStream.h"
+#include "common/pch.h"
 
-#include <fstream>
-#include <string>
+#include "colorStream.h"
 
 // Be sure when using this class to not output anything to std::cout while 
 
@@ -23,10 +22,14 @@ public:
                 << rgbPixel.z() << std::endl;
     }
 
-    ~PPMStream() {
+    void exportImage() {
         if (outfile.is_open()) {
             outfile.close();
         }
+    }
+
+    ~PPMStream() {
+        exportImage();
     }
 private:
     std::ofstream outfile;
